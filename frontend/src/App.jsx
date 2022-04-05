@@ -8,7 +8,8 @@ function App () {
  
 
   return <>
-    
+    {/* To look at example parent page uncomment following line */}
+    {/* <ParentPage/> */}
   </>;
   
 }

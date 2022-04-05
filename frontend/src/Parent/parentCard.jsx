@@ -11,15 +11,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-export const ParentCard = () => {
+export const ParentCard = (children) => {
     const [open, setOpen] = React.useState(false);
-
+    const [note, setNote] = React.useState('');
     const handleClickOpen = () => {
       setOpen(true);
     };
   
     const handleClose = () => {
-      setOpen(false);
+        console.log(note);
+        setOpen(false);
     };
     
     return <>
@@ -31,15 +32,23 @@ export const ParentCard = () => {
 
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           Current Room: Room 1
+          {/*Child.currentRoom*/}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           Chaperone: John Doe
+          {/*Child.name*/}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           Health Status: Healthy
+          {/*Child.healthStatus*/}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           Recent Behavioral Concerns: None
+          {/*Child.behavior*/}
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          Notes about your child:{note}
+          {/*Child.notes*/}
         </Typography>
       </CardContent>
       <CardActions>
@@ -62,9 +71,12 @@ export const ParentCard = () => {
             type="Note"
             fullWidth
             variant="standard"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
+
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Note</Button>
         </DialogActions>
