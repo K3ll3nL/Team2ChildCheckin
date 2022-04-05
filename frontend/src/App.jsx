@@ -8,8 +8,8 @@ function App () {
  
 
   return <>
-    {/* To look at example parent page uncomment following line */}
-    {/* <ParentPage/> */}
+    {/* To look at example parent page comment/uncomment following line */}
+    <ParentPage/>
   </>;
   
 }
