@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import { ParentPage } from './Parent/parentPage';
 import axios from 'axios';
 
 // React functional component
 function App () {
  
 
-  return (
-    <div>Test</div>
-  );
+  return <>
+    {/* To look at example parent page uncomment following line */}
+    {/* <ParentPage/> */}
+  </>;
+  
 }
 
 export default App;
