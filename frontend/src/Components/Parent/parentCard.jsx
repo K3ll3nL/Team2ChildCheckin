@@ -27,7 +27,7 @@ export const ParentCard = (children) => {
 
   return <>
     <Box sx={{m:5}}>
-      <Card variant="outlined" sx={{ minWidth: 275 },  { boxShadow: 2 }}>
+      <Card variant="outlined" sx={{ minWidth: 275 , boxShadow: 2 }}>
         <CardContent >
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Wyatt Saltzman
