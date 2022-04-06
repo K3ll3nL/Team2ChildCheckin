@@ -18,3 +18,4 @@ export const ParentPage = () => {
 
     </>;
 }
+export default ParentPage;
