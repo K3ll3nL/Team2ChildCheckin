@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
+import ResponsiveAppBar from './NavBar';
 
 // React functional component
 function App () {
  
 
   return (
-    <div>Test</div>
+    <>
+    <ResponsiveAppBar />
+    </>
   );
 }
 
