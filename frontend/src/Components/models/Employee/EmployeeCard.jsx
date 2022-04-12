@@ -49,9 +49,10 @@ export const EmployeeCard = () => {
   };
   const handleClose = () => {
     setOpen(false);
+    setSelectedIndex(null);
   };
-  const ParentModal = (i) => {
-    console.log(i);
+  const ParentModal = () => {
+    console.log(arr[selectedIndex]);
     return (
     <Modal
       open={open}
@@ -60,7 +61,7 @@ export const EmployeeCard = () => {
       aria-describedby="parent-modal-description"
     >
       <Box sx={{ ...style, width: 400 }}>
-        <h2 id="parent-modal-title">{arr[i.i]}</h2>
+        <h2 id="parent-modal-title">{arr[selectedIndex]}</h2>
         <p id="parent-modal-description">
           Children:
         </p>
@@ -90,7 +91,7 @@ export const EmployeeCard = () => {
               </ListItemButton>
             ))}
           </List>
-          <ParentModal i={selectedIndex} />
+          <ParentModal />
         </Grid>
       </Grid>
     </Box>
