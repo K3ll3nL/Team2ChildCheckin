@@ -7,6 +7,7 @@ import { LoginPage } from './Login/loginPage';
 import { requirePropFactory } from '@mui/material';
 import { RegistrationPage } from './Login/registration';
 import ResponsiveAppBar from './Components/NavBar';
+import { EmployeeCard } from './Components/models/Employee/EmployeeCard';
 
 
 // React functional component
@@ -15,7 +16,10 @@ function App () {
 
 
   return (
-   <RegistrationPage />
+    <>
+    <ResponsiveAppBar />
+   <EmployeeCard />
+   </>
   );
 
 }
