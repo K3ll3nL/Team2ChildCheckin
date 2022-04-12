@@ -11,9 +11,9 @@ function App () {
 
   return <>
     {/* To look at example parent page comment/uncomment following line */}
-    <ResponsiveAppBar />
+    {/* <ResponsiveAppBar />
     <DaycareBanner/>
-    <ParentPage />
+    <ParentPage /> */}
   </>;
   
 }

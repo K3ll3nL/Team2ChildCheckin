@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export const DaycareBanner = () => {
-
+    
     return <>
         <Box sx={{ mt:-5}}>
             <Box sx={{ display: 'inline' }, { boxShadow: 2 }}>
