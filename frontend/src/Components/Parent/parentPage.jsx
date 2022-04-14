@@ -3,13 +3,14 @@ import ResponsiveAppBar from '../NavBar';
 import { DaycareBanner } from './daycareBanner';
 
 import { ParentCard } from './parentCard';
-
+import { DaycareBanner } from './daycareBanner';
+import ResponsiveAppBar from '../NavBar';
 export const ParentPage = () => {
    
     
     return <>
-        <ResponsiveAppBar />
-        <DaycareBanner />
+    <ResponsiveAppBar/>
+    <DaycareBanner/>
     <Grid container spacing={2}>
         <Grid item xs={6}>
             <ParentCard/>
