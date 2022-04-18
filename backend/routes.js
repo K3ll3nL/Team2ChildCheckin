@@ -89,6 +89,35 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  // GET/centers/:center_id/name
+  // returns the name of center_id
+  app.get('/centers/:center_id/name', (req, res) => {
+    var center_id = req.param('center_id');
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT name FROM center WHERE center_id = ${center_id}`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
   // GET/centers/:center_id/parents
   // returns all parents that use the center with id center_id
   app.get('/centers/:center_id/parents', (req, res) => {
@@ -117,6 +146,8 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  
 
 
   // GET/parents
