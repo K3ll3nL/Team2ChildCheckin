@@ -15,12 +15,8 @@ import { useEffect, useState } from "react";
 import {getKids} from "..//..//api/parentApi";
 
 
-export const ParentCard = (children) => {
-  const [ kids, setKids ] = useState([]);
-
-    useEffect (() => {
-        getKids().then(x => setKids(x));
-    }, []);
+export const ParentCard = (child) => {
+  
 
   const [open, setOpen] = React.useState(false);
   const [note, setNote] = React.useState('');
@@ -34,29 +30,19 @@ export const ParentCard = (children) => {
   };
 
   return <>
-    {/* {console.log(kids["rows"][0])} */}
+
     <Box sx={{m:5}}>
       <Card variant="outlined" sx={{ minWidth: 275 , boxShadow: 2 }}>
         <CardContent >
-        { kids["rows"] && kids["rows"].map((kid, index) =>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    {kid.name}
-                    <br></br>
-                    Current Room: {kid.room_id}
-                    <br></br>
-                    Age: {kid.age}
-                    <br></br>
-                    
-                </Typography>) 
-                }
-          
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {child.child.name}
+          </Typography>
 
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Current Room: Room 1
-            {/*Child.currentRoom*/}
+            Current Room: {child.child.room_id}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Chaperone: John Doe
+            Age: {child.child.age}
             {/*Child.name*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
