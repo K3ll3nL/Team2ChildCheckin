@@ -11,9 +11,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useEffect, useState } from "react";
+import {getKids} from "..//..//api/parentApi";
 
 
 export const ParentCard = (children) => {
+  const [ kids, setKids ] = useState([]);
+
+    useEffect (() => {
+        getKids().then(x => setKids(x));
+    }, []);
+
   const [open, setOpen] = React.useState(false);
   const [note, setNote] = React.useState('');
   const handleClickOpen = () => {
@@ -26,12 +34,22 @@ export const ParentCard = (children) => {
   };
 
   return <>
+    {/* {console.log(kids["rows"][0])} */}
     <Box sx={{m:5}}>
       <Card variant="outlined" sx={{ minWidth: 275 , boxShadow: 2 }}>
         <CardContent >
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Wyatt Saltzman
-          </Typography>
+        { kids["rows"] && kids["rows"].map((kid, index) =>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {kid.name}
+                    <br></br>
+                    Current Room: {kid.room_id}
+                    <br></br>
+                    Age: {kid.age}
+                    <br></br>
+                    
+                </Typography>) 
+                }
+          
 
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Current Room: Room 1

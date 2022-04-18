@@ -1,9 +1,7 @@
 import { Grid } from '@mui/material';
-import ResponsiveAppBar from '../NavBar';
 import { DaycareBanner } from './daycareBanner';
 
 import { ParentCard } from './parentCard';
-import { DaycareBanner } from './daycareBanner';
 import ResponsiveAppBar from '../NavBar';
 export const ParentPage = () => {
    

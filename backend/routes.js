@@ -203,7 +203,7 @@ module.exports = function routes(app, logger) {
           } else {
             console.log(rows)
             res.status(200).json({
-              "data": rows
+              rows
             });
           }
         });
