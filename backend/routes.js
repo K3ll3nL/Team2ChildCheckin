@@ -1,4 +1,6 @@
 const pool = require('./db')
+const Employee = require('./models/employee')
+const employeeController = require('./controllers')
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -332,4 +334,21 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  // POST/login
+  //Allows a user to log in to the website
+  router.post('/login', async (req, res, next) => {
+    try {
+        const body = req.body;
+        console.log(body);
+        const result = await employeeController.authenticateEmployee(body.username, body.password);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to authorize user:', err);
+        res.status(401).json({ message: err.toString() });
+    }
+
+    next();
+  
+  })
 }
