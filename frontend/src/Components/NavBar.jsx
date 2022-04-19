@@ -10,9 +10,22 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { createTheme } from '@mui/material';
+import { createTheme, Link } from '@mui/material';
 
-const pages = [];
+const pages = [
+    {
+        displayName: "Login",
+        link: "/Login"
+    },
+    {
+        displayName: "Register",
+        link: "/Registration"
+    },
+    {
+        displayName: "Employees",
+        link: "/EmployeeCard"
+    }
+];
 const settings = ['Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -77,13 +90,7 @@ const ResponsiveAppBar = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
+                            <Link sx={{margin: 2}} href={page.link} color="inherit" underline="hover">{page.displayName}</Link>
                         ))}
                     </Box>
                  
