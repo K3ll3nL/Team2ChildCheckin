@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField'
 import '../index.css'
 import { useState } from 'react'
 import { Box } from '@mui/system'
+import ResponsiveAppBar from '../Components/NavBar'
 export const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -23,10 +24,10 @@ export const LoginPage = () => {
 
     console.log(username);
     return (
-
         <Box >
+            <ResponsiveAppBar></ResponsiveAppBar>
 
-            <Grid container justifyContent="center" >
+            <Grid container justifyContent="center" sx={{marginTop: 5}}>
                 <Card>
                     <CardHeader title="Login"></CardHeader>
                     <CardContent>
@@ -36,7 +37,7 @@ export const LoginPage = () => {
                             <TextField id="password" label="Password" className="" variant="outlined" type="password" margin="normal" sx={{ display: "block" }} onChange={handlePassChange} />
                         </form>
                         <Typography variant="subtitle2" sx={{marginTop: 3, display: "inline"}}>Need an account? </Typography>
-                        <Link href="https://google.com">SIGN UP</Link>
+                        <Link href="/Registration">SIGN UP</Link>
                     </CardContent>
                     <CardActions>
                         <Button variant="contained" fullWidth margin="normal" onClick={handleButtonClick}>Login</Button>

@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { theme } from '../../theme';
+import ResponsiveAppBar from '../../NavBar';
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -69,6 +70,7 @@ export const EmployeeCard = () => {
     </Modal>)
   }
   return <>
+  <ResponsiveAppBar />
     <Box sx={{ flexGrow: 1, maxWidth: 752, m: 2 }} theme={theme}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>

@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField'
 import '../index.css'
 import { useState } from 'react'
 import { Box } from '@mui/system'
+import ResponsiveAppBar from '../Components/NavBar'
 export const RegistrationPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -43,8 +44,8 @@ export const RegistrationPage = () => {
     return (
 
         <Box >
-
-            <Grid container justifyContent="center" >
+            <ResponsiveAppBar />
+            <Grid container justifyContent="center" sx={{marginTop: 3}}>
                 <Card>
                     <CardHeader title="Register"></CardHeader>
                     <CardContent>
@@ -70,7 +71,7 @@ export const RegistrationPage = () => {
                                 </FormGroup>
                             </form>
                             <Typography variant="subtitle2" sx={{ marginTop: 3, display: "inline" }}>Already have an account? </Typography>
-                            <Link href="https://google.com">LOGIN</Link>
+                            <Link href="/Login">LOGIN</Link>
                         
                     </CardContent>
                     <CardActions>
