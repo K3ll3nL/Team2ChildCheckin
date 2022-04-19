@@ -336,8 +336,8 @@ module.exports = function routes(app, logger) {
   });
 
   // POST/login
-  //Allows a user to log in to the website
-  router.post('/login', async (req, res, next) => {
+  //provides a json webtoken that can be used to show that a user is logged in
+  router.post('/employeeLogin', async (req, res, next) => {
     try {
         const body = req.body;
         console.log(body);
@@ -350,5 +350,57 @@ module.exports = function routes(app, logger) {
 
     next();
   
-  })
+  });
+
+  // POST/createEmployee
+  // creates a new employee in the database
+  router.post('/createEmployee', async (req, res, next) => {
+    try {
+        const body = req.body;
+        console.log(body);
+        const result = await Employee.addEmployee(body.username, body.password);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to create employee:', err);
+        res.status(401).json({ message: err.toString() });
+    }
+
+    next();
+  
+  });
+
+  // POST/createParent
+  // creates a new parent in the database
+  router.post('/createParent', async (req, res, next) => {
+    try {
+        const body = req.body;
+        console.log(body);
+        const result = await Parent.addParent(body.username, body.password);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to create parent:', err);
+        res.status(401).json({ message: err.toString() });
+    }
+
+    next();
+  
+  });
+
+  // POST/parentLogin 
+  //provides a json webtoken that can be used to show that a user is logged in
+  router.post('/parentLogin', async (req, res, next) => {
+    try {
+        const body = req.body;
+        console.log(body);
+        const result = await parentController.authenticateParent(body.username, body.password);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to authorize user:', err);
+        res.status(401).json({ message: err.toString() });
+    }
+
+    next();
+  
+  });
+
 }
