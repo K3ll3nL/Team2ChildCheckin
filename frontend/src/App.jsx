@@ -22,6 +22,7 @@ function App () {
           <Route path='/Login' element={<LoginPage />} />
           <Route path='/Registration' element={<RegistrationPage />} />
           <Route path='/EmployeeCard' element={<EmployeeCard />} />
+          <Route path='/ParentPage' element={<ParentPage />} />
           <Route path='*' element={<ResponsiveAppBar />} />
         </Routes>
       </Router>
