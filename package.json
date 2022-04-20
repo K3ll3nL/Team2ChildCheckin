@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@mui/styles": "^5.6.0",
-    "bcrypt": "^5.0.1"
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1"
   }
 }

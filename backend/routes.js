@@ -1,7 +1,5 @@
-const { authenticateEmployee } = require('./controllers/employee');
 const pool = require('./db');
-const Employee = require('./models/employee');
-const Parent = require('./models/parent');
+const jwt = require('jsonwebtoken');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -444,39 +442,120 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection',err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
+        const accessTokenSecret = 'mysupercoolsecret';
         // if there is no issue obtaining a connection, execute query and release connection
-        const result = 0;
         if (req.body.is_employee === true) {
-          result = authenticateEmployee(req.body.username, req.body.password);
+          connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error withID the query, log the error
+              logger.error("Problem getting from table: \n", err);
+              res.status(400).send('Problem getting table'); 
+            } else {
+              console.log(rows)
+              if (rows.length > 0) {
+                const token = jwt.sign({
+                  user: rows[0].username,
+                  employee_id: rows[0].employee_id,
+                  is_employee: rows[0].is_employee
+                }, accessTokenSecret, {
+                  expiresIn: '1h'
+                });
+                res.status(200).json({
+                  "data": rows,
+                  "token": token
+                });
+              } else {
+                res.status(400).send('Invalid username or password');
+              }
+            }
+          });
+          
         }
         else {
-          result = authenticateParent(req.body.username, req.body.password);
+          connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error withID the query, log the error
+              logger.error("Problem getting from table: \n", err);
+              res.status(400).send('Problem getting table'); 
+            } else {
+              console.log(rows)
+              if (rows.length > 0) {
+                const token = jwt.sign({
+                  user: rows[0].username,
+                  parent_id: rows[0].parent_id,
+                  is_employee: rows[0].is_employee
+                }, accessTokenSecret, {
+                  expiresIn: '1h'
+                });
+                res.status(200).json({
+                  "data": rows,
+                  "token": token
+                });
+              } else {
+                res.status(400).send('Invalid username or password');
+              }
+            }
+          });
+          
         }
-        res.status(201).json(result);
       }
     });
   });
 
-  // POST/parentLogin 
-  //provides a json webtoken that can be used to show that a user is logged in
-  // app.post('/login', async (req, res, next) => {
-  //   try {
-  //       const body = req.body;
-  //       console.log(body);
-  //       if (body.is_employee === true) {
-  //         const result = Employee.authenticateEmployee(body.username, body.password);
-  //       }
-  //       else {
-  //         const result = Parent.authenticateParent(body.username, body.password);
-  //       }
-  //       res.status(201).json(result);
-  //   } catch (err) {
-  //       console.error('Failed to authorize user:', err);
-  //       res.status(401).json({ message: err.toString() });
-  //   }
+  //GET /rooms/centerID
+  //returns all rooms in a given center
+  app.get('/rooms/:centerID', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM room WHERE center_id = ?`, [req.params.centerID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
 
-  //   next();
-  
-  // });
+  //GET /kids/centerID
+  //returns all kids in a given center
+  app.get('/kids/:centerID', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM kid WHERE center_id = ?`, [req.params.centerID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
 
 }
