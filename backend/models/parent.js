@@ -1,15 +1,9 @@
-const knex = require('../db/knex');
 //const bcrypt = require('bcrypt');
 //const { hash } = require('bcrypt');
 
 const PARENT_TABLE = 'parent';
 
 const addParent = async (username, password, email) => {
-    // console.log('Raw password:', password);
-    // const salt = await bcrypt.genSalt(10);
-    // console.log('Password salt', salt);
-    // const hashedPassword = await bcrypt.hash(password, salt);
-    // console.log('Hashed password', hashedPassword);
 
     const results = knex(PARENT_TABLE).insert({ username, password, email});
     const result = await results;
@@ -22,7 +16,13 @@ const findParentByUsername = async (username) => {
     return result;
 }
 
-const authenticateParent = async (username, password) => {
+const fetchParent = async (username) => {
+    const query = knex(EMPLOYEE_TABLE).where({username});
+    const result = await query;
+    return result;
+}
+
+const authenticateParentUser = async (username, password) => {
     //console.log('in function');
     const users = await findUserByUsername(username);
     console.log('Results of users query', users);
@@ -45,7 +45,8 @@ const authenticateParent = async (username, password) => {
 }
 
 module.exports = {
-    authenticateParent,
+    authenticateParentUser,
     findParentByUsername,
-    addParent
+    addParent,
+    fetchParent
 }

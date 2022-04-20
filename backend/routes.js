@@ -1,3 +1,4 @@
+const { authenticateEmployee } = require('./controllers/employee');
 const pool = require('./db');
 const Employee = require('./models/employee');
 const Parent = require('./models/parent');
@@ -335,60 +336,147 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // POST/createEmployee
-  // creates a new employee in the database
-  app.post('/createEmployee', async (req, res, next) => {
-    try {
-        const body = req.body;
-        console.log(body);
-        const result = await Employee.addEmployee(body.username, body.password, body.email);
-        res.status(201).json(result);
-    } catch (err) {
-        console.error('Failed to create employee:', err);
-        res.status(401).json({ message: err.toString() });
-    }
-
-    next();
-  
+  //GET/employees
+  //returns all employees in the database
+  app.get('/employees', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM employee`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
   });
 
-  // POST/createParent
-  // creates a new parent in the database
-  app.post('/createParent', async (req, res, next) => {
-    try {
-        const body = req.body;
-        console.log(body);
-        const result = await Parent.addParent(body.username, body.password, body.email);
-        res.status(201).json(result);
-    } catch (err) {
-        console.error('Failed to create parent:', err);
-        res.status(401).json({ message: err.toString() });
-    }
+  //GET/parents
+  //returns all parents in the database
+  app.get('/parents', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM parent`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
 
-    next();
-  
+
+  //POST/createUser
+  //Creates a new user in the database
+  app.post('/createUser', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        if (req.body.is_employee === true) {
+          connection.query(`INSERT INTO employee(username,password,email) VALUES(?,?,?)`, [req.body.username,req.body.password,req.body.email], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error withID the query, log the error
+              logger.error("Problem getting from table: \n", err);
+              res.status(400).send('Problem getting table'); 
+            } else {
+              console.log(rows)
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+        else {
+          connection.query(`INSERT INTO parent(username,password,email) VALUES(?,?,?)`, [req.body.username,req.body.password,req.body.email], function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error withID the query, log the error
+              logger.error("Problem getting from table: \n", err);
+              res.status(400).send('Problem getting table'); 
+            } else {
+              console.log(rows)
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+      }
+    });
+  });
+
+  //POST/login
+  //Logs in a user
+  app.post('/login', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        const result = 0;
+        if (req.body.is_employee === true) {
+          result = authenticateEmployee(req.body.username, req.body.password);
+        }
+        else {
+          result = authenticateParent(req.body.username, req.body.password);
+        }
+        res.status(201).json(result);
+      }
+    });
   });
 
   // POST/parentLogin 
   //provides a json webtoken that can be used to show that a user is logged in
-  app.post('/login', async (req, res, next) => {
-    try {
-        const body = req.body;
-        console.log(body);
-        if (body.is_employee === true) {
-          const result = Employee.authenticateEmployee(body.username, body.password);
-        }
-        else {
-          const result = Parent.authenticateParent(body.username, body.password);
-        }
-        res.status(201).json(result);
-    } catch (err) {
-        console.error('Failed to authorize user:', err);
-        res.status(401).json({ message: err.toString() });
-    }
+  // app.post('/login', async (req, res, next) => {
+  //   try {
+  //       const body = req.body;
+  //       console.log(body);
+  //       if (body.is_employee === true) {
+  //         const result = Employee.authenticateEmployee(body.username, body.password);
+  //       }
+  //       else {
+  //         const result = Parent.authenticateParent(body.username, body.password);
+  //       }
+  //       res.status(201).json(result);
+  //   } catch (err) {
+  //       console.error('Failed to authorize user:', err);
+  //       res.status(401).json({ message: err.toString() });
+  //   }
 
-    next();
+  //   next();
   
-  });
+  // });
 
 }

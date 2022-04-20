@@ -1,26 +1,31 @@
-const knex = require('../db/knex');
-//const bcrypt = require('bcrypt');
 
 const EMPLOYEE_TABLE = 'employee';
 
-const addEmployee = async (username, password, email) => {
-    // console.log('Raw password:', password);
-    // const salt = await bcrypt.genSalt(10);
-    // console.log('Password salt', salt);
-    // const hashedPassword = await bcrypt.hash(password, salt);
-    // console.log('Hashed password', hashedPassword);
-    const results = knex(EMPLOYEE_TABLE).insert({ username, password, email});
-    const result = await results;
-    return result;
-}
+// const addEmployee = async (username, password, email) => {
+//     const results = knex(EMPLOYEE_TABLE).insert({ username, password, email});
+//     const result = await results;
+//     return result;
+// }
 
-const findUserByUsername = async (username) => {
-    const query = knex(EMPLOYEE_TABLE).where({ username });
+const findEmployeeByUsername = async (username) => {
+    const query = await this.query('SELECT * FROM employee WHERE username = ?', [username]);
     const result = await query;
     return result;
 }
 
-const authenticateEmployee = async (username, password) => {
+// const fetchEmployee = async (username) => {
+//     const query = knex(EMPLOYEE_TABLE).where({username});
+//     const result = await query;
+//     return result;
+// }
+
+// const fetchAllEmployees = async () => {
+//     const query = knex(EMPLOYEE_TABLE);
+//     const result = await query;
+//     return result;
+// }
+
+const authenticateEmployeeUser = async (username, password) => {
     //console.log('in function');
     const users = await findUserByUsername(username);
     console.log('Results of users query', users);
@@ -34,12 +39,6 @@ const authenticateEmployee = async (username, password) => {
         return user;
     }
     return null;
-    // const validPassword = await bcrypt.compare(password, user.password);
-    // if (validPassword) {
-    //     delete user.password;
-    //     return user;
-    // }
-    // return null;
 }
 
-module.exports = {authenticateEmployee, findUserByUsername, addEmployee}
+module.exports = {authenticateEmployeeUser, findEmployeeByUsername}
