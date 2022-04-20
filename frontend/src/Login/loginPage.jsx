@@ -17,8 +17,14 @@ export const LoginPage = () => {
     }
 
     const handleButtonClick = () => {
-        //TODO Send information to api and see if it is a valid name
-        alert(`Username: ${username}\nPassword: ${password}`);
+        if(!username) {
+            alert("Please enter a username!")    
+        } else if(!password) {
+            alert("Please enter a password!")
+        } else {
+            alert(`Username: ${username}\nPassword: ${password}`);
+            //TODO Add validation Stuff
+        }
     }
 
 
