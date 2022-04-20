@@ -24,6 +24,10 @@ const pages = [
     {
         displayName: "Employees",
         link: "/EmployeeCard"
+    },
+    {
+        displayName:"RoomList",
+        link: "/RoomList"
     }
 ];
 const settings = ['Dashboard', 'Logout'];
