@@ -558,4 +558,88 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //GET /kids/centerID/roomID
+  //returns all kids in a given room
+  app.get('/kids/:centerID/:roomID', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM kid WHERE center_id = ? AND room_id = ?`, [req.params.centerID,req.params.roomID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+  //GET /employees/centerID
+  //returns all employees in a given center
+  app.get('/employees/:centerID', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM employee WHERE center_id = ?`, [req.params.centerID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+  //GET /employees/centerID/roomID
+  //returns all employees in a given room
+  app.get('/employees/:centerID/:roomID', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM employee WHERE center_id = ? AND room_id = ?`, [req.params.centerID,req.params.roomID], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+
+
+
 }
