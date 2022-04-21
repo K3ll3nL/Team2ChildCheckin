@@ -10,8 +10,8 @@ import ResponsiveAppBar from './Components/NavBar';
 import { EmployeeCard } from './Components/models/Employee/EmployeeCard';
 import { RoomList } from './Components/models/Employee/roomList';
 import { EmployeePage } from './Components/employeePage';
-
-
+import { DaycareCard } from './Components/DaycareSearch/daycareCard';
+import {DaycarePage} from './Components/DaycareSearch/daycarePage';
 // React functional component
 function App () {
  
@@ -29,7 +29,8 @@ function App () {
           <Route path='*' element={<ResponsiveAppBar />} />
         </Routes>
       </Router> */}
-      <ParentPage/>
+      {/* <ParentPage/> */}
+      <DaycarePage/>
     </div>
 
   );
