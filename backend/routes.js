@@ -855,7 +855,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('UPDATE kid SET room_id = ? WHERE child_id = ? ', [req.body.room_id], [req.params.child_id], function (err, rows, fields) {
+        connection.query('UPDATE child SET room_id = ? WHERE child_id = ? ', [req.body.room_id], [req.params.child_id], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
@@ -909,7 +909,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO kid (name, parent_id, room_id, age, health, center_id, behavior) VALUES (?, ?, ?, ?, ?, ?)', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior], function (err, rows, fields) {
+        connection.query('INSERT INTO child (name, parent_id, room_id, age, health, center_id, behavior) VALUES (?, ?, ?, ?, ?, ?, ?)', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
