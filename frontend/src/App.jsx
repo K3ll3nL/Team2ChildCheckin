@@ -8,6 +8,8 @@ import { requirePropFactory } from '@mui/material';
 import { RegistrationPage } from './Login/registration';
 import ResponsiveAppBar from './Components/NavBar';
 import { EmployeeCard } from './Components/models/Employee/EmployeeCard';
+import { RoomList } from './Components/models/Employee/roomList';
+import { EmployeePage } from './Components/employeePage';
 
 
 // React functional component
@@ -23,6 +25,7 @@ function App () {
           <Route path='/Registration' element={<RegistrationPage />} />
           <Route path='/EmployeeCard' element={<EmployeeCard />} />
           <Route path='/ParentPage' element={<ParentPage />} />
+          <Route path='/RoomList' element={<EmployeePage />} />
           <Route path='*' element={<ResponsiveAppBar />} />
         </Routes>
       </Router> */}
