@@ -476,7 +476,7 @@ module.exports = function routes(app, logger) {
         // if there is no issue obtaining a connection, execute query and release connection
         if (req.body.is_employee === true) {
           //check if employee is already in the database
-          connection.query(`SELECT * FROM employee WHERE email=?`, [req.body.email], function (err, rows, fields) {
+          connection.query(`SELECT * FROM employee WHERE username=?`, [req.body.username], function (err, rows, fields) {
             if (err) {
               // if there is an error withID the query, log the error
               logger.error("Problem getting from table: \n", err);
@@ -492,9 +492,9 @@ module.exports = function routes(app, logger) {
                     res.status(400).send('Problem getting table'); 
                   } else {
                     console.log(rows)
-                    res.status(200).json({
-                      "data": rows
-                    });
+                    // res.status(200).json({
+                    //   "data": rows
+                    // });
                   }
                 });
                 connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
@@ -528,7 +528,7 @@ module.exports = function routes(app, logger) {
         }
         else {
           //check if parent is already in the database
-          connection.query(`SELECT * FROM parent WHERE email=?`, [req.body.email], function (err, rows, fields) {
+          connection.query(`SELECT * FROM parent WHERE username=?`, [req.body.username], function (err, rows, fields) {
             if (err) {
               // if there is an error withID the query, log the error
               logger.error("Problem getting from table: \n", err);
@@ -544,9 +544,9 @@ module.exports = function routes(app, logger) {
                     res.status(400).send('Problem getting table'); 
                   } else {
                     console.log(rows)
-                    res.status(200).json({
-                      "data": rows
-                    });
+                    // res.status(200).json({
+                    //   "data": rows
+                    // });
                   }
                 });
                 connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
