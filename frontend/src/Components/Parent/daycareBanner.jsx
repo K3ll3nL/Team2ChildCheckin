@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
-export const DaycareBanner = () => {
+import {getDaycare } from "..//..//api/parentApi";
+export const DaycareBanner = (daycareName) => {
 
     return <>
 
@@ -18,7 +19,7 @@ export const DaycareBanner = () => {
             <Grid item xs={12} sx={{ mt: 2 }}>
 
                 <Typography variant="h4" gutterBottom>
-                    Joe's Daycare
+                    {daycareName.daycareName.data[0].name}
                 </Typography>
 
             </Grid>
