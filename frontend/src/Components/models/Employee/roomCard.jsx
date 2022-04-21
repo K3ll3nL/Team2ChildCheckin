@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getKidsByRoomId } from "../../../api/roomsApi";
 
 
-export const RoomCard = ({ roomId, roomName, setKids, kids,centerId }) => {
+export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,setEmployees }) => {
     
       
     

@@ -7,7 +7,7 @@ import { RoomCard } from "./roomCard";
 
 
 
-export const RoomList = ({ centerId,kids,setKids, rooms,setRooms}) => {
+export const RoomList = ({ centerId,kids,setKids, rooms,setRooms,employees,setEmployees}) => {
     
    
 

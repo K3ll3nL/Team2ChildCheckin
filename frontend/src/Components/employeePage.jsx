@@ -1,6 +1,7 @@
 import { AppBar, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useMemo, useState } from "react"
+import { getEmployeesByCenterId } from "../api/employeeApi"
 import { getKidsByCenterId, getRoomsByCenterId } from "../api/roomsApi"
 import { ListWithSearch } from "./listWithSearch"
 import { RoomList } from "./models/Employee/roomList"
@@ -28,7 +29,7 @@ const theme = createTheme({
 export const EmployeePage = () => {
     const [kids, setKids] = useState([]);
     const [tabValue,setTabValue] = useState(0);
-
+    const [employees,setEmployees] = useState([]);
     const handleTabChange = (event, newVal) => {
         setTabValue(newVal);
     }
@@ -56,6 +57,19 @@ export const EmployeePage = () => {
             })
             //    console.log(_orgs);
             setKids(_kids);
+        });
+    }, []);
+    let _employees = [];
+    useEffect(() => {
+        getEmployeesByCenterId(1).then(x => {
+            //    debugger;
+            // console.log("Children: ")
+            x.data.map(val => {
+                _employees.push(val)
+                // console.log(val)
+            })
+            //    console.log(_orgs);
+            setKids(_employees);
         });
     }, []);
 
@@ -108,7 +122,7 @@ export const EmployeePage = () => {
                     </TabPanel>
                 </Grid>
                 <Grid item xs={8}>
-                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms}/>
+                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees}/>
                 </Grid>
             </Grid>
         </Box>
