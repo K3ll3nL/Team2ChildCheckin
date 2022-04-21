@@ -119,8 +119,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  
-
   // GET/centers/:center_id/parents
   // returns all parents that use the center with id center_id
   app.get('/centers/:center_id/parents', (req, res) => {
@@ -150,9 +148,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  
-
-
   // GET/parents
   // returns all parent information
   app.get('/parents/', (req, res) => {
@@ -180,7 +175,6 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-
 
   // POST/parents/
   // Adds a new parent to the database
@@ -473,6 +467,7 @@ module.exports = function routes(app, logger) {
   //Creates a new user in the database
   app.post('/createUser', (req, res) => {
     pool.getConnection(function (err, connection){
+      const accessTokenSecret = 'mysupercoolsecret';
       if(err){
         // if there is an issue obtaining a connection, release the connection instance and log the error
         logger.error('Problem obtaining MySQL connection',err)
@@ -480,34 +475,111 @@ module.exports = function routes(app, logger) {
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         if (req.body.is_employee === true) {
-          connection.query(`INSERT INTO employee(username,password,email,center_id) VALUES(?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id], function (err, rows, fields) {
-            connection.release();
+          //check if employee is already in the database
+          connection.query(`SELECT * FROM employee WHERE email=?`, [req.body.email], function (err, rows, fields) {
             if (err) {
               // if there is an error withID the query, log the error
               logger.error("Problem getting from table: \n", err);
-              res.status(400).send('Problem getting table'); 
+              res.status(400).send('Problem getting table');
             } else {
-              console.log(rows)
-              res.status(200).json({
-                "data": rows
-              });
+              if (rows.length > 0) {
+                res.status(400).send('Employee already exists');
+              } else {
+                connection.query(`INSERT INTO employee(username,password,email,center_id) VALUES(?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id], function (err, rows, fields) {
+                  if (err) {
+                    // if there is an error withID the query, log the error
+                    logger.error("Problem getting from table: \n", err);
+                    res.status(400).send('Problem getting table'); 
+                  } else {
+                    console.log(rows)
+                    res.status(200).json({
+                      "data": rows
+                    });
+                  }
+                });
+                connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+                  if (err) {
+                    // if there is an error withID the query, log the error
+                    logger.error("Problem getting from table: \n", err);
+                    res.status(400).send('Problem getting table'); 
+                  } else {
+                    console.log(rows)
+                    if (rows.length > 0) {
+                      const token = jwt.sign({
+                        user: rows[0].username,
+                        employee_id: rows[0].employee_id,
+                        is_employee: rows[0].is_employee
+                      }, accessTokenSecret, {
+                        expiresIn: '1h'
+                      });
+                      connection.release();
+                      res.status(200).json({
+                        "data": rows,
+                        "token": token
+                      });
+                    } else {
+                      res.status(400).send('Invalid username or password');
+                    }
+                  }
+                });
+              }
             }
           });
         }
         else {
-          connection.query(`INSERT INTO parent(username,password,email,center_id) VALUES(?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id], function (err, rows, fields) {
-            connection.release();
+          //check if parent is already in the database
+          connection.query(`SELECT * FROM parent WHERE email=?`, [req.body.email], function (err, rows, fields) {
             if (err) {
               // if there is an error withID the query, log the error
               logger.error("Problem getting from table: \n", err);
-              res.status(400).send('Problem getting table'); 
+              res.status(400).send('Problem getting table');
             } else {
-              console.log(rows)
-              res.status(200).json({
-                "data": rows
-              });
+              if (rows.length > 0) {
+                res.status(400).send('Parent already exists');
+              } else {
+                connection.query(`INSERT INTO parent(username,password,email,center_id) VALUES(?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id], function (err, rows, fields) {
+                  if (err) {
+                    // if there is an error withID the query, log the error
+                    logger.error("Problem getting from table: \n", err);
+                    res.status(400).send('Problem getting table'); 
+                  } else {
+                    console.log(rows)
+                    res.status(200).json({
+                      "data": rows
+                    });
+                  }
+                });
+                connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+                  
+                  if (err) {
+                    // if there is an error withID the query, log the error
+                    logger.error("Problem getting from table: \n", err);
+                    res.status(400).send('Problem getting table'); 
+                  } else {
+                    console.log(rows)
+                    if (rows.length > 0) {
+                      const token = jwt.sign({
+                        user: rows[0].username,
+                        parent_id: rows[0].parent_id,
+                        is_employee: rows[0].is_employee
+                      }, accessTokenSecret, {
+                        expiresIn: '1h'
+                      });
+                      connection.release();
+                      res.status(200).json({
+                        "data": rows,
+                        "token": token
+                      });
+                    } else {
+                      res.status(400).send('Invalid username or password');
+                    }
+                  }
+                });
+              }
+
             }
           });
+          
         }
       }
     });
@@ -827,5 +899,30 @@ module.exports = function routes(app, logger) {
     });
   });
 
-
+  //POST /kids
+  //adds a kid to the database
+  app.post('/kids', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query('INSERT INTO kid (name, parent_id, room_id, age, health, center_id, behavior) VALUES (?, ?, ?, ?, ?, ?)', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
 }
