@@ -3,9 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
-import {getDaycare } from "..//..//api/parentApi";
-export const DaycareBanner = (daycareName) => {
-
+import { getDaycare, removeDaycare } from "..//..//api/parentApi";
+export const DaycareBanner = ({daycareName,setDaycare}) => {
     return <>
 
 
@@ -19,12 +18,19 @@ export const DaycareBanner = (daycareName) => {
             <Grid item xs={12} sx={{ mt: 2 }}>
 
                 <Typography variant="h4" gutterBottom>
-                    {daycareName.daycareName.data[0].name}
+                    {daycareName.data&&daycareName.data[0].name}
+                    {/* {removeDaycare()} */}
                 </Typography>
 
             </Grid>
             <Grid item xs={6}>
-                <Button variant="contained">
+                <Button 
+                    onClick={() => {
+                        removeDaycare();
+                        console.log(setDaycare);
+                        setDaycare([{name: "No Daycare",center_id: -1}]);
+                    }} 
+                variant="contained">
                     Remove Current Daycare
                 </Button>
             </Grid>
