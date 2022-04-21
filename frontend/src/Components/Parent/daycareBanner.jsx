@@ -28,7 +28,7 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
                     onClick={() => {
                         removeDaycare();
                         console.log(setDaycare);
-                        setDaycare([{name: "No Daycare",center_id: -1}]);
+                        setDaycare();
                     }} 
                 variant="contained">
                     Remove Current Daycare
