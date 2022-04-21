@@ -19,7 +19,7 @@ export const ParentPage = () => {
 
     return <>
         <ResponsiveAppBar />
-        <DaycareBanner daycareName={daycare}/>
+        <DaycareBanner daycareName={daycare} setDaycare={setDaycare}/>
         <Grid container spacing={2}>
             
 

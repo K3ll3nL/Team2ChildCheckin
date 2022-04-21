@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import {getKids} from "..//..//api/parentApi";
 
 
-export const ParentCard = (child) => {
+export const ParentCard = ({child}) => {
   
 
   const [open, setOpen] = React.useState(false);
@@ -36,14 +36,14 @@ export const ParentCard = (child) => {
       <Card variant="outlined" sx={{ minWidth: 275 , boxShadow: 2 }}>
         <CardContent >
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {child.child.name}
+            {child.name}
           </Typography>
 
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Current Room: {child.child.room_id}
+            Current Room: {child.room_id}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Age: {child.child.age}
+            Age: {child.age}
             {/*Child.name*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
