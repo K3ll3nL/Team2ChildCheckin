@@ -7,19 +7,8 @@ import { RoomCard } from "./roomCard";
 
 
 
-export const RoomList = ({ centerId,kids,setKids }) => {
-    const [rooms, setRooms] = useState([]);
-    let _rooms = [];
-    useEffect(() => {
-        getRoomsByCenterId(centerId).then(x => {
-            //    debugger;
-            x.data.map(val => {
-                _rooms.push(val)
-            })
-            //    console.log(_orgs);
-            setRooms(_rooms);
-        });
-    }, []);
+export const RoomList = ({ centerId,kids,setKids, rooms,setRooms}) => {
+    
    
 
     console.log(`Center id: ${centerId} `)

@@ -1,7 +1,7 @@
-import { AppBar, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useMemo, useState } from "react"
-import { getKidsByCenterId } from "../api/roomsApi"
+import { getKidsByCenterId, getRoomsByCenterId } from "../api/roomsApi"
 import { ListWithSearch } from "./listWithSearch"
 import { RoomList } from "./models/Employee/roomList"
 import ResponsiveAppBar from "./NavBar"
@@ -59,7 +59,18 @@ export const EmployeePage = () => {
         });
     }, []);
 
-
+    const [rooms, setRooms] = useState([]);
+    let _rooms = [];
+    useEffect(() => {
+        getRoomsByCenterId(1).then(x => {
+            //    debugger;
+            x.data.map(val => {
+                _rooms.push(val)
+            })
+            //    console.log(_orgs);
+            setRooms(_rooms);
+        });
+    }, []);
 
     return (
         <Box>
@@ -69,14 +80,11 @@ export const EmployeePage = () => {
                 <Grid item xs={4}>
                     <AppBar position="static" theme={theme} >
                         <Tabs value={tabValue} onChange={handleTabChange}  textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#FFFFFB"}}}>
-                            <Tab label="Find Child"/>
                             <Tab label="Unassigned Children"/>
+                            <Tab label="Find Child"/>
                         </Tabs>
                     </AppBar>
                     <TabPanel value={tabValue} index={0}>
-                        <ListWithSearch valToList={kids} attributeToDisplay="name"/>
-                    </TabPanel>
-                    <TabPanel value={tabValue} index={1}>
                         <List>
                             {
                                 unassignedKids.map(kid => (
@@ -85,6 +93,7 @@ export const EmployeePage = () => {
                                         <ListItemButton>
         
                                             <ListItemText primary={kid.name} />
+                                            
                                         </ListItemButton>
         
                                     </ListItem>
@@ -92,9 +101,14 @@ export const EmployeePage = () => {
                             }
                         </List>
                     </TabPanel>
+                    <TabPanel value={tabValue} index={1}>
+                        <ListWithSearch valToList={kids} attributeToDisplay="name" chipAttributeValue="room_id" chipValToList={rooms} chipValToDisplay="room_name">
+                            
+                        </ListWithSearch>
+                    </TabPanel>
                 </Grid>
                 <Grid item xs={8}>
-                    <RoomList centerId={1} kids={kids} setKids={setKids} />
+                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms}/>
                 </Grid>
             </Grid>
         </Box>
