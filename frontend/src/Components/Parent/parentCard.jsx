@@ -11,6 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+
 import { useEffect, useState } from "react";
 import {getKids} from "..//..//api/parentApi";
 
@@ -48,10 +49,6 @@ export const ParentCard = (child) => {
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Health Status: Healthy
             {/*Child.healthStatus*/}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Recent Behavioral Concerns: None
-            {/*Child.behavior*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Notes about your child:{note}

@@ -17,7 +17,7 @@ function App () {
 
   return (
     <div className='app'>
-      <Router>
+      {/* <Router>
         <Routes>
           <Route path='/Login' element={<LoginPage />} />
           <Route path='/Registration' element={<RegistrationPage />} />
@@ -25,7 +25,8 @@ function App () {
           <Route path='/ParentPage' element={<ParentPage />} />
           <Route path='*' element={<ResponsiveAppBar />} />
         </Routes>
-      </Router>
+      </Router> */}
+      <ParentPage/>
     </div>
 
   );
