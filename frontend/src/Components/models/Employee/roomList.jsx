@@ -7,7 +7,7 @@ import { RoomCard } from "./roomCard";
 
 
 
-export const RoomList = ({ centerId }) => {
+export const RoomList = ({ centerId,kids,setKids }) => {
     const [rooms, setRooms] = useState([]);
     let _rooms = [];
     useEffect(() => {
@@ -20,20 +20,7 @@ export const RoomList = ({ centerId }) => {
             setRooms(_rooms);
         });
     }, []);
-    const [kids, setKids] = useState([]);
-    let _kids = [];
-    useEffect(() => {
-        getKidsByCenterId(centerId).then(x => {
-            //    debugger;
-            console.log("Children: ")
-            x.data.map(val => {
-                _kids.push(val)
-                console.log(val)
-            })
-            //    console.log(_orgs);
-            setKids(_kids);
-        });
-    }, []);
+   
 
     console.log(`Center id: ${centerId} `)
     kids.map(kid => {
@@ -43,7 +30,7 @@ export const RoomList = ({ centerId }) => {
         <Grid container spacing={2}>
             {
                 rooms.map((room) => (
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <RoomCard roomId={room.room_id} roomName={room.room_name} setKids={setKids} kids={kids} centerId={centerId}></RoomCard>
                     </Grid>
                 ))

@@ -38,7 +38,7 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId }) => {
                     {
                         _kids.map(kid => (
 
-                            <ListItem>
+                            <ListItem divider>
                                 <ListItemButton>
 
                                     <ListItemText primary={kid.name} />
@@ -51,7 +51,7 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId }) => {
             </CardContent>
             <CardActions>
                 
-                <Button variant="contained" fullWidth onClick={handleAddKid}>Add Kid</Button>
+                <Button variant="contained" fullWidth onClick={handleAddKid}>Add Child</Button>
 
             </CardActions>
         </Card>
