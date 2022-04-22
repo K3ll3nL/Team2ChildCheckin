@@ -27,8 +27,6 @@ export const LoginPage = () => {
         }
     }
 
-
-    console.log(username);
     return (
         <Box >
             <ResponsiveAppBar></ResponsiveAppBar>

@@ -7,6 +7,7 @@ import { Box } from '@mui/system'
 import ResponsiveAppBar from '../Components/NavBar'
 import { getOrgs } from '../api/organizationsApi'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { createUser } from '../api/parentApi'
 export const RegistrationPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -41,22 +42,39 @@ export const RegistrationPage = () => {
             alert("Please select an organization!")
         } else {
             // alert(`Username: ${username}\nPassword: ${password}\nEmail: ${email}\nIsEmployee: ${isEmployee}\nOrg: ${organization}`);
-            //TODO Add post route to accounts, LogIN the user and direct them to the correct page
-           navigate("/Login");
+            let user = {
+                username: username,
+                password: password,
+                email: email,
+                is_employee: isEmployee,
+                center_id: fullOrgs.find(x => x["name"] === organization)["center_id"]
+            }
+            let jwt = {};
+            createUser(user).then(x => {
+                x=jwt;
+                console.log(jwt)
+            });
+            
+            
+        //    navigate("/Login");
         }
     }
 
     const [orgs,setOrgs] = useState([]);
+    const [fullOrgs,setFullOrgs] = useState([]);
     let _orgs = [];
+    let _fullOrgs = [];
     useEffect(() => {
         //will pass in parent id to get kids
         getOrgs().then(x => {
         //    debugger;
            x.data.map(val => {
+               _fullOrgs.push(val);
                _orgs.push(val["name"])
            })
            console.log(_orgs);
            setOrgs(_orgs);
+           setFullOrgs(_fullOrgs);
         });
     }, []);
 
