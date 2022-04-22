@@ -69,7 +69,7 @@ export const EmployeePage = () => {
                 // console.log(val)
             })
             //    console.log(_orgs);
-            setKids(_employees);
+            setEmployees(_employees);
         });
     }, []);
 
