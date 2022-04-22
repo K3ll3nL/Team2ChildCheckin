@@ -49,7 +49,12 @@ export const RegistrationPage = () => {
                 is_employee: isEmployee,
                 center_id: fullOrgs.find(x => x["name"] === organization)["center_id"]
             }
-            createUser(user);
+            let jwt = {};
+            createUser(user).then(x => {
+                x=jwt;
+                console.log(jwt)
+            });
+            
             
         //    navigate("/Login");
         }
