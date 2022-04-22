@@ -8,6 +8,7 @@ import ResponsiveAppBar from '../Components/NavBar'
 import { getOrgs } from '../api/organizationsApi'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { createUser } from '../api/parentApi'
+import jwt_decoder from 'jwt-decode'
 export const RegistrationPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +16,7 @@ export const RegistrationPage = () => {
     const [isEmployee,setIsEmployee] = useState(false);
     const [organization,setOrganization] = useState('');
     const navigate = useNavigate();
+
 
     const handleUserChange = (e) => {
         setUsername(e.target.value);
@@ -32,7 +34,8 @@ export const RegistrationPage = () => {
     const handleIsEmployee = () => {
         setIsEmployee(!isEmployee);
     }
-
+    
+    
     const handleButtonClick = () => {
         if(!username) {
             alert("Please enter a username!")    
@@ -49,11 +52,19 @@ export const RegistrationPage = () => {
                 is_employee: isEmployee,
                 center_id: fullOrgs.find(x => x["name"] === organization)["center_id"]
             }
+            
             let jwt = {};
             createUser(user).then(x => {
-                x=jwt;
-                console.log(jwt)
-            });
+                
+                jwt = x;
+                console.log(jwt);
+
+                console.log(jwt_decoder(jwt.token));
+                sessionStorage.setItem("jwt",jwt.token);
+            })
+            // console.log("Jwt: ") 
+            // console.log(jwt);
+        
             
             
         //    navigate("/Login");

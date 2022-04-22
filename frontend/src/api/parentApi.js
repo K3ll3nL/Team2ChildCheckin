@@ -29,10 +29,14 @@ export const getDaycare = () => new Promise((resolve, reject) => {
 
 export const createUser = (user) => new Promise((resolve, reject) => {
     console.log(`user: ${user}`)
-    console.log(user);
+    // console.log(user);
 
     axios.post(`${URL}/users`, user)
-        .then(x => resolve(x.data))
+        .then(x => {
+            // console.log(x.data);   
+            resolve(x.data)
+
+        })
         .catch(x => {
             alert(x);
             reject(x);
@@ -45,7 +49,7 @@ export const removeDaycare = () => new Promise((resolve, reject) => {
             "parent_id": 2
         }
     }
-    console.log(config.body);
+    // console.log(config.body);
     axios.put(`${URL}/parents/parent_id/removeCenter`, config.body)
         .then(x => resolve(x.data))
         .catch(x => {

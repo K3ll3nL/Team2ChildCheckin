@@ -523,15 +523,13 @@ module.exports = function routes(app, logger) {
                     console.log(rows)
                     if (rows.length > 0) {
                       const token = jwt.sign({
-                        user: rows[0].username,
-                        employee_id: rows[0].employee_id,
-                        is_employee: rows[0].is_employee
+                        user_id: rows[0].employee_id,
+                        is_employee: true,
                       }, accessTokenSecret, {
                         expiresIn: '1h'
                       });
                       connection.release();
                       res.status(200).json({
-                        "data": rows,
                         "token": token
                       });
                     } else {
@@ -576,15 +574,13 @@ module.exports = function routes(app, logger) {
                     console.log(rows)
                     if (rows.length > 0) {
                       const token = jwt.sign({
-                        user: rows[0].username,
-                        parent_id: rows[0].parent_id,
-                        is_employee: rows[0].is_employee
+                        user_id: rows[0].parent_id,
+                        is_employee: false,
                       }, accessTokenSecret, {
                         expiresIn: '1h'
                       });
                       connection.release();
                       res.status(200).json({
-                        "data": rows,
                         "token": token
                       });
                     } else {
