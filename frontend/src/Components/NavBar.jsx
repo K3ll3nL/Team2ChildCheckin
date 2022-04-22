@@ -11,7 +11,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, Link } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom'
+import jwt_decoder from 'jwt-decode'
 const pages = [
     {
         displayName: "Login",
@@ -30,19 +31,39 @@ const pages = [
         link: "/RoomList"
     }
 ];
-const settings = ['Dashboard', 'Logout'];
+
 
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [user,setUser] = React.useState(null);
 
+    React.useEffect(() => {
+        const token = sessionStorage.getItem("jwt")
+        try {
+            setUser(jwt_decoder(token))
+        } catch (e) {
+
+        }
+    },[])
+    const navigate = useNavigate();
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
+    const handleLogout = () => {
+        sessionStorage.setItem("jwt","");
+        navigate("/Login")
+    }
+    const handleDashboard = () => {
+        if(user["is_employee"]) {
+            navigate("/roomList")
+        } else {
+            navigate("/parentPage")
+        }
+    }
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
@@ -98,7 +119,7 @@ const ResponsiveAppBar = () => {
                         ))}
                     </Box>
                  
-                    <Box sx={{ flexGrow: 0, justifyContent: 'flex-end' }}>
+                    {user && <Box sx={{ flexGrow: 0, justifyContent: 'flex-end' }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -120,13 +141,16 @@ const ResponsiveAppBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            
+                                <MenuItem key="dashboard" onClick={handleDashboard}>
+                                    <Typography textAlign="center">Dashboard</Typography>
                                 </MenuItem>
-                            ))}
+                                <MenuItem key="Logout" onClick={handleLogout}>
+                                    <Typography textAlign="center">Logout</Typography>
+                                </MenuItem>
+                            
                         </Menu>
-                    </Box>
+                    </Box>}
                 </Toolbar>
             </Container>
         </AppBar>
