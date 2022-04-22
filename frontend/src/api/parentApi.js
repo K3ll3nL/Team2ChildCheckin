@@ -43,6 +43,23 @@ export const createUser = (user) => new Promise((resolve, reject) => {
         });
 
 });
+
+export const login = (user) => new Promise((resolve, reject) => {
+    console.log(`user: ${user}`)
+    // console.log(user);
+
+    axios.post(`${URL}/login`, user)
+        .then(x => {
+            // console.log(x.data);   
+            resolve(x.data)
+
+        })
+        .catch(x => {
+            // alert(x);
+            reject(x);
+        });
+
+});
 export const removeDaycare = () => new Promise((resolve, reject) => {
     const config = {
         body: {
