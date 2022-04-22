@@ -50,7 +50,7 @@ export const RegistrationPage = () => {
                 password: password,
                 email: email,
                 is_employee: isEmployee,
-                center_id: fullOrgs.find(x => x["name"] === organization)["center_id"]
+                center_id: isEmployee ? fullOrgs.find(x => x["name"] === organization)["center_id"] : -1
             }
             
             let jwt = {};

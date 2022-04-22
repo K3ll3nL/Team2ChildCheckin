@@ -609,9 +609,9 @@ module.exports = function routes(app, logger) {
       } else {
         const accessTokenSecret = 'mysupercoolsecret';
         // if there is no issue obtaining a connection, execute query and release connection
-        if (req.body.is_employee === true) {
+        
           connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
-            connection.release();
+            
             if (err) {
               // if there is an error withID the query, log the error
               logger.error("Problem getting from table: \n", err);
@@ -619,10 +619,10 @@ module.exports = function routes(app, logger) {
             } else {
               console.log(rows)
               if (rows.length > 0) {
+                connection.release();
                 const token = jwt.sign({
-                  user: rows[0].username,
-                  employee_id: rows[0].employee_id,
-                  is_employee: rows[0].is_employee
+                  user_id: rows[0].employee_id,
+                  is_employee: true,
                 }, accessTokenSecret, {
                   expiresIn: '1h'
                 });
@@ -631,40 +631,39 @@ module.exports = function routes(app, logger) {
                   "token": token
                 });
               } else {
-                res.status(400).send('Invalid username or password');
+                connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+                  connection.release();
+                  if (err) {
+                    // if there is an error withID the query, log the error
+                    logger.error("Problem getting from table: \n", err);
+                    res.status(400).send('Problem getting table'); 
+                  } else {
+                    console.log(rows)
+                    if (rows.length > 0) {
+                      const token = jwt.sign({
+                        user_id: rows[0].parent_id,
+                        is_employee: false,
+                      }, accessTokenSecret, {
+                        expiresIn: '1h'
+                      });
+                      res.status(200).json({
+                        "data": rows,
+                        "token": token
+                      });
+                    } else {
+                      res.status(400).send('Invalid username or password');
+                    }
+                  }
+                });
               }
             }
           });
           
-        }
-        else {
-          connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
-            connection.release();
-            if (err) {
-              // if there is an error withID the query, log the error
-              logger.error("Problem getting from table: \n", err);
-              res.status(400).send('Problem getting table'); 
-            } else {
-              console.log(rows)
-              if (rows.length > 0) {
-                const token = jwt.sign({
-                  user: rows[0].username,
-                  parent_id: rows[0].parent_id,
-                  is_employee: rows[0].is_employee
-                }, accessTokenSecret, {
-                  expiresIn: '1h'
-                });
-                res.status(200).json({
-                  "data": rows,
-                  "token": token
-                });
-              } else {
-                res.status(400).send('Invalid username or password');
-              }
-            }
-          });
+        
+        
           
-        }
+          
+        
       }
     });
   });
