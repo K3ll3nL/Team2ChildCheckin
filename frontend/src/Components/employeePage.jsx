@@ -1,4 +1,4 @@
-import { AppBar, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar, Avatar, Button, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useMemo, useState } from "react"
 import { getEmployeesByCenterId } from "../api/employeeApi"
@@ -6,7 +6,12 @@ import { getKidsByCenterId, getRoomsByCenterId } from "../api/roomsApi"
 import { ListWithSearch } from "./listWithSearch"
 import { RoomList } from "./models/Employee/roomList"
 import ResponsiveAppBar from "./NavBar"
-
+import { ParentCard } from "./Parent/parentCard"
+import sadFace from '../img/bad_face.jpg'
+import { BehaviorFace } from "./models/behaviorFace"
+import jwt_decoder from 'jwt-decode'
+import { useNavigate } from "react-router-dom"
+import { ChildRoomSelector } from "./models/Employee/childRoomSelector"
 const theme = createTheme({
     palette: {
         primary: {
@@ -30,6 +35,27 @@ export const EmployeePage = () => {
     const [kids, setKids] = useState([]);
     const [tabValue,setTabValue] = useState(0);
     const [employees,setEmployees] = useState([]);
+    const [loggedInEmployee,setLoggedInEmployee] = useState({});
+    const [dialogOpen,setDialogOpen] = useState(false);
+    const navigate = useNavigate();
+
+
+    const clearKids = () => {
+        let _kids = [...kids];
+        _kids.map(kid => {
+            kid.room_id=-1;
+        })
+        setKids(_kids);
+    }
+    useEffect(() => {
+        try {
+            const _employee = jwt_decoder(sessionStorage.getItem("jwt"));
+            setLoggedInEmployee(_employee);
+        } catch {
+            navigate("/Login");
+        }
+    },[])
+
     const handleTabChange = (event, newVal) => {
         setTabValue(newVal);
     }
@@ -86,12 +112,28 @@ export const EmployeePage = () => {
         });
     }, []);
 
+    const handleUnassignKid= (kidId) => {
+        _kids = [...kids];
+        // console.log("Childnrenzasdf")
+        for (let i in _kids) {
+            if(_kids[i].child_id === kidId) {
+                _kids[i].room_id = -1;
+
+            }
+        }
+        setKids(_kids);
+        setDialogOpen(false);
+    }
+    
     return (
         <Box>
 
             <ResponsiveAppBar></ResponsiveAppBar>
-            <Grid container sx={{margin: 1}} spacing={2}>
-                <Grid item xs={4}>
+            
+
+            <Grid container sx={{padding:1.5}} spacing={2} columns={12}>
+                <Grid item xs={12} sm={12} md={12} lg={4}>
+                    
                     <AppBar position="static" theme={theme} >
                         <Tabs value={tabValue} onChange={handleTabChange}  textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#FFFFFB"}}}>
                             <Tab label="Unassigned Children"/>
@@ -99,17 +141,21 @@ export const EmployeePage = () => {
                         </Tabs>
                     </AppBar>
                     <TabPanel value={tabValue} index={0}>
+                        <Button variant="contained" fullWidth onClick={clearKids} sx={{marginBottom:1,marginTop:1}}>clear assigned kids</Button>
+                        <ChildRoomSelector open={dialogOpen} handleAddKid={handleUnassignKid} setOpen={setDialogOpen} kids={kids} buttonLabel="Unassign child" dialogTitle={`Unassign a Child`} />
+                        <hr></hr>
                         <List>
                             {
                                 unassignedKids.map(kid => (
-
-                                    <ListItem divider>
+                                    
+                                    <ListItem divider key={kid.child_id}>
                                         <ListItemButton>
         
                                             <ListItemText primary={kid.name} />
                                             
                                         </ListItemButton>
-        
+                                       <BehaviorFace kid={kid} mutable={false}/>
+                                        
                                     </ListItem>
                                 ))
                             }
@@ -121,10 +167,11 @@ export const EmployeePage = () => {
                         </ListWithSearch>
                     </TabPanel>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12} sm={12} md={12} lg={8}>
                     <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees}/>
                 </Grid>
             </Grid>
+        
         </Box>
     )
 }

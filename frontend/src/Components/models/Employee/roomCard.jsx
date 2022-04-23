@@ -1,12 +1,15 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Chip, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
+import { Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Chip, Dialog, DialogTitle, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { getKidsByRoomId } from "../../../api/roomsApi";
+import { BehaviorFace } from "../behaviorFace";
+import { ChildRoomSelector } from "./childRoomSelector";
 
 
 export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,setEmployees }) => {
     
-      
-    
+      const [dialogOpen,setDialogOpen] = useState(false);
+    const [selectedValue, setSelectedValue] = useState({});
    
    
     let _kids = [];
@@ -16,43 +19,90 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
         }
     })
 
+    let currEmployee = null;
+    employees.map(employee => {
+        if (employee.room_id === roomId) {
+            currEmployee = employee;
+        }
+    })
     
-    const handleAddKid= () => {
+    const handleAddKid= (kidId) => {
         _kids = [...kids];
-        console.log("Childnrenzasdf")
+        // console.log("Childnrenzasdf")
         for (let i in _kids) {
-            if(_kids[i].name === "Kid Shock") {
+            if(_kids[i].child_id === kidId) {
                 _kids[i].room_id = roomId;
 
             }
         }
         setKids(_kids);
+        setDialogOpen(false);
+    }
+    const test = () => {
+        console.log("Button was clicked")
+    }
+    const handleButtonClick = () => {
+        setDialogOpen(true);
+    }
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+    }
+    const setButtonColor = () => {
+        if(_kids.length === 0) {
+            return "success"
+        } else {
+            return "error"
+        }
+    }
+
+    const determineSubHeader = () => {
+        if(currEmployee) {
+            return(
+               <Box sx={{marginTop:1}}>
+
+
+                    <Chip label={currEmployee.name}/>
+                    <hr></hr>
+               </Box>
+               
+            )
+        } else {
+            return (
+                <Box sx={{marginTop: 1}}>
+
+
+                    <Button variant="contained" color={setButtonColor()} size="small">Join This Room</Button>
+                    <hr></hr>
+                </Box>
+            
+            )
+        }
     }
         console.log(`Kids: ${typeof (kids)}`)
     return (
-        <Card>
-            <CardHeader title={roomName} />
-
-            <CardContent>
-                <List>
+        <Card sx={{minWidth:250}}>
+            <CardHeader title={roomName} subheader={determineSubHeader()} sx={{margin:0,paddingBottom:0}}/>
+            {_kids.length !== 0 && <CardContent sx={{marginTop:0,paddingTop:0,paddingBottom:0}}>
+           
+                
+                <List sx={{marginTop:0}}>
                     {
                         _kids.map(kid => (
 
-                            <ListItem divider>
-                                <ListItemButton>
+                            <ListItem divider key={kid.child_id} sx={{}}>
+                                <ListItemButton >
 
                                     <ListItemText primary={kid.name} />
                                 </ListItemButton>
-
+                                <BehaviorFace setKids={setKids} kid={kid} kids={kids}/>
                             </ListItem>
                         ))
                     }
                 </List>
-            </CardContent>
-            <CardActions>
+            </CardContent>}
+            <CardActions sx={{marginTop:0,paddingTop:0}}>
                 
-                <Button variant="contained" fullWidth onClick={handleAddKid}>Add Child</Button>
-
+                <ChildRoomSelector open={dialogOpen} handleAddKid={handleAddKid} setOpen={setDialogOpen} kids={kids} buttonLabel="Move child" dialogTitle={`Move a child to ${roomName}`} />
             </CardActions>
         </Card>
     )
