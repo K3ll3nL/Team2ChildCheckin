@@ -52,6 +52,7 @@ export const EmployeePage = () => {
         try {
             const _employee = jwt_decoder(sessionStorage.getItem("jwt"));
             setLoggedInEmployee(_employee);
+            // console.log(loggedInEmployee)
         } catch {
             navigate("/Login");
         }
@@ -76,7 +77,9 @@ export const EmployeePage = () => {
     let _kids = [];
     let _uncheckedInKids = [];
     useEffect(() => {
-        getKidsByCenterId(1).then(x => {
+
+        // console.log(loggedInEmployee)
+        getKidsByCenterId(loggedInEmployee.center_id).then(x => {
             //    debugger;
             // console.log("Children: ")
             // x.data.map(val => {
@@ -99,10 +102,10 @@ export const EmployeePage = () => {
             setUnCheckedInKids(_uncheckedInKids);
             setKids(_kids);
         });
-    }, []);
+    }, [loggedInEmployee]);
     let _employees = [];
     useEffect(() => {
-        getEmployeesByCenterId(1).then(x => {
+        getEmployeesByCenterId(loggedInEmployee.center_id).then(x => {
             //    debugger;
             // console.log("Children: ")
             x.data.forEach(val => {
@@ -112,7 +115,7 @@ export const EmployeePage = () => {
             //    console.log(_orgs);
             setEmployees(_employees);
         });
-    }, []);
+    }, [loggedInEmployee]);
 
     const [rooms, setRooms] = useState([]);
     let _rooms = [];
