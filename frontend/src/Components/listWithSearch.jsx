@@ -1,4 +1,4 @@
-import { Chip, FormControl, List, ListItem, ListItemText, TextField, useFormControl } from "@mui/material";
+import { Chip, FormControl, List, ListItem, ListItemText, TextField, Typography, useFormControl } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 
 
@@ -16,6 +16,9 @@ export const ListWithSearch = ({valToList,children,attributeToDisplay, chipAttri
 
                 <CustomFilter items={searchTerms} setItems ={setSearchTerms} fullList ={items}/>
             </FormControl>
+            {
+                searchTerms.length === 0 && <Typography align="center" color="#9e9e9e">No children have been checked in</Typography>
+            }
             <List>
                 {
                      searchTerms && searchTerms.map(val => (

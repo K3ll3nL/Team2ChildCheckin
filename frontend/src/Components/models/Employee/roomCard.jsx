@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { getKidsByRoomId } from "../../../api/roomsApi";
 import { BehaviorFace } from "../behaviorFace";
+import { ChildInformationPopUp } from "./childInformationPopup";
 import { ChildRoomSelector } from "./childRoomSelector";
 
 
@@ -10,7 +11,15 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
     
       const [dialogOpen,setDialogOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState({});
-   
+   const [kidInfoOpen,setKidInfoOpen] = useState(false);
+   const [kidToDisplay, setKidToDisplay] = useState({
+       name: "Default Name",
+       age: 0,
+       health: "Default Health",
+       notes: "Default Notes"
+    
+
+   });
    
     let _kids = [];
     kids.map(kid => {
@@ -26,11 +35,11 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
         }
     })
     
-    const handleAddKid= (kidId) => {
+    const handleAddKid= (kid) => {
         _kids = [...kids];
         // console.log("Childnrenzasdf")
         for (let i in _kids) {
-            if(_kids[i].child_id === kidId) {
+            if(_kids[i].child_id === kid.child_id) {
                 _kids[i].room_id = roomId;
 
             }
@@ -90,6 +99,11 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
             )
         }
     }
+
+    const handleKidInfoDisplay = (kid) => {
+        setKidToDisplay(kid);
+        setKidInfoOpen(true);
+    }
         // console.log(`Kids: ${typeof (kids)}`)
     return (
         <Card sx={{minWidth:250}}>
@@ -102,7 +116,7 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
                         _kids.map(kid => (
 
                             <ListItem divider key={kid.child_id} sx={{}}>
-                                <ListItemButton >
+                                <ListItemButton onClick={() => handleKidInfoDisplay(kid)}>
 
                                     <ListItemText primary={kid.name} />
                                 </ListItemButton>
@@ -112,9 +126,18 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
                     }
                 </List>
             </CardContent>}
+            <ChildInformationPopUp kid={kidToDisplay} open={kidInfoOpen} setOpen={setKidInfoOpen} />
             <CardActions sx={{marginTop:0,paddingTop:0}}>
                 
-                <ChildRoomSelector open={dialogOpen} handleAddKid={handleAddKid} setOpen={setDialogOpen} kids={kids} buttonLabel="Move child" dialogTitle={`Move a child to ${roomName}`} />
+                <ChildRoomSelector 
+                    open={dialogOpen} 
+                    handleSelect={handleAddKid} 
+                    setOpen={setDialogOpen} 
+                    kids={kids} 
+                    buttonLabel="Move child" 
+                    dialogTitle={`Move a child to ${roomName}`} 
+                    roomId={roomId}
+                />
             </CardActions>
         </Card>
     )
