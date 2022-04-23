@@ -1,7 +1,8 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Chip, Dialog, DialogTitle, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardContent, CardHeader, Chip, List, ListItem, ListItemButton, ListItemText } from "@mui/material"
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
-import { getKidsByRoomId } from "../../../api/roomsApi";
+import { useState } from "react";
+import { updateEmployeeRoom, updateKid } from "../../../api/employeeApi";
+
 import { BehaviorFace } from "../behaviorFace";
 import { ChildInformationPopUp } from "./childInformationPopup";
 import { ChildRoomSelector } from "./childRoomSelector";
@@ -10,7 +11,7 @@ import { ChildRoomSelector } from "./childRoomSelector";
 export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,setEmployees,loggedInEmployee }) => {
     
       const [dialogOpen,setDialogOpen] = useState(false);
-    const [selectedValue, setSelectedValue] = useState({});
+   
    const [kidInfoOpen,setKidInfoOpen] = useState(false);
    const [kidToDisplay, setKidToDisplay] = useState({
        name: "Default Name",
@@ -22,14 +23,14 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
    });
    
     let _kids = [];
-    kids.map(kid => {
+    kids.forEach(kid => {
         if (kid.room_id === roomId) {
             _kids.push(kid);
         }
     })
 
     let currEmployee = null;
-    employees.map(employee => {
+    employees.forEach(employee => {
         if (employee.room_id === roomId) {
             currEmployee = employee;
         }
@@ -37,6 +38,7 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
     
     const handleAddKid= (kid) => {
         _kids = [...kids];
+        kid.room_id = roomId;
         // console.log("Childnrenzasdf")
         for (let i in _kids) {
             if(_kids[i].child_id === kid.child_id) {
@@ -44,6 +46,7 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
 
             }
         }
+        updateKid(kid);
         setKids(_kids);
         setDialogOpen(false);
     }
@@ -54,19 +57,11 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
         for (let i in _employees) {
             if(_employees[i].employee_id === loggedInEmployee.user_id) {
                 _employees[i].room_id = roomId;
+                updateEmployeeRoom(_employees[i]);
                 // console.log(_employees[i]);
             }
         }
         setEmployees(_employees);
-    }
-    const test = () => {
-        console.log("Button was clicked")
-    }
-    const handleButtonClick = () => {
-        setDialogOpen(true);
-    }
-    const handleDialogClose = () => {
-        setDialogOpen(false);
     }
     const setButtonColor = () => {
         if(_kids.length === 0) {

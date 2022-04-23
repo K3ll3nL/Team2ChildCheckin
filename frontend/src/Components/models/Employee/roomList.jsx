@@ -1,6 +1,4 @@
 import { Grid } from "@mui/material"
-import { useEffect, useState } from "react"
-import { getKidsByCenterId, getRoomsByCenterId } from "../../../api/roomsApi";
 import { RoomCard } from "./roomCard";
 
 

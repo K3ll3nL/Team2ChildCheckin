@@ -896,30 +896,7 @@ module.exports = function routes(app, logger) {
 
   //PUT /kids/:child_id
   //updates the room information of a kid
-  app.put('/kids/:child_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
-        // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('UPDATE child SET room_id = ? WHERE child_id = ? ', [req.body.room_id], [req.params.child_id], function (err, rows, fields) {
-          connection.release();
-          if (err) {
-            // if there is an error withID the query, log the error
-            logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
-          } else {
-            console.log(rows)
-            res.status(200).json({
-              "data": rows
-            });
-          }
-        });
-      }
-    });
-  });
+
 
   //PUT /employees/:employee_id
   //updates the information room of an employee
@@ -931,7 +908,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('UPDATE employee SET room_id = ? WHERE id = ? ', [req.body.room_id], [req.params.employee_id], function (err, rows, fields) {
+        connection.query('UPDATE employee SET room_id = ? WHERE employee_id = ? ', [req.body.room_id, req.params.employee_id], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
@@ -1005,6 +982,7 @@ module.exports = function routes(app, logger) {
   //PUT /kids
   //updates the information of a kid
   app.put('/kids/:child_id', (req, res) => {
+    console.log(req.body);
     pool.getConnection(function (err, connection){
       if(err){
         // if there is an issue obtaining a connection, release the connection instance and log the error
@@ -1012,7 +990,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('UPDATE child SET name = ?, parent_id = ?, room_id = ?, age = ?, health = ?, center_id = ?, behavior = ? WHERE child_id = ?', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior, req.params.child_id], function (err, rows, fields) {
+        connection.query('UPDATE child SET name = ?, parent_id = ?, room_id = ?, age = ?, health = ?, center_id = ?, behavior = ?,checked_in = ? WHERE child_id = ?', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior, req.body.checked_in, req.params.child_id], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error

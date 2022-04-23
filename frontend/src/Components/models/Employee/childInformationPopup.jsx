@@ -1,8 +1,8 @@
-import { Button, Chip, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
-import { Box } from "@mui/system"
+import { Chip, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material"
 
 
-export const ChildInformationPopUp = ({open,setOpen,kid}) => {
+
+export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
 
     const childNotes = [
         "Allergic to Beans",
@@ -11,18 +11,26 @@ export const ChildInformationPopUp = ({open,setOpen,kid}) => {
     ]
 
     // console.log(childNotes);
-   return <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">
+    return <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle>
-            <Typography variant="h5">{kid.name}</Typography>
+            <Typography sx={{ fontSize: "1.5rem" }} >{kid.name}</Typography>
         </DialogTitle>
         <DialogContent>
-            <Typography>health Status: {kid.health}</Typography>
-            <Typography>Age: {kid.age}</Typography>
+            <div>
+
+                <Typography sx={{ display: "inline" }}>Health:   </Typography>
+                <Chip label={kid.health} />
+            </div>
+            <div>
+
+                <Typography sx={{ display: "inline" }}>Age:   </Typography>
+                <Chip label={kid.age} />
+            </div>
             <Typography>Notes:</Typography>
             {
-                        childNotes.map(note => (
-                            <Chip label={note} sx={{margin:1}}  />
-                        ))
+                childNotes.map(note => (
+                    <Chip key={note} label={note} sx={{ margin: 1 }} />
+                ))
             }
         </DialogContent>
     </Dialog>

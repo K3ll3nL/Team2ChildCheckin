@@ -1,12 +1,12 @@
-import { Chip, FormControl, List, ListItem, ListItemText, TextField, Typography, useFormControl } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Chip, FormControl, List, ListItem, ListItemText, TextField, Typography} from "@mui/material";
+import {  useState } from "react";
 
 
 
 export const ListWithSearch = ({valToList,children,attributeToDisplay, chipAttributeValue, chipValToList, chipValToDisplay}) => {
-    let temp = valToList;
-    const [items, setItems] = useState(temp);
-    const [searchTerms,setSearchTerms] = useState(temp);
+    
+    
+    const [searchTerms,setSearchTerms] = useState(valToList);
     
     // console.log(chipValToList.find(x=> x[chipAttributeValue] === searchTerms[0][chipAttributeValue]));
 
@@ -14,16 +14,16 @@ export const ListWithSearch = ({valToList,children,attributeToDisplay, chipAttri
         <div>
             <FormControl fullWidth>
 
-                <CustomFilter items={searchTerms} setItems ={setSearchTerms} fullList ={items}/>
+                <CustomFilter items={searchTerms} setItems ={setSearchTerms} fullList ={valToList}/>
             </FormControl>
             {
-                searchTerms.length === 0 && <Typography align="center" color="#9e9e9e">No children have been checked in</Typography>
+                searchTerms.length === 0 && <Typography align="center" color="#9e9e9e">No children found</Typography>
             }
             <List>
                 {
                      searchTerms && searchTerms.map(val => (
 
-                        <ListItem divider>
+                        <ListItem divider key={val[attributeToDisplay]}>
                             
 
                                 <ListItemText primary={val[attributeToDisplay]} />
@@ -44,7 +44,7 @@ export const ListWithSearch = ({valToList,children,attributeToDisplay, chipAttri
 
 const CustomFilter = ({items,setItems,fullList}) => {
     const [searched, setSearched] = useState("");
-    const [focused,setFocused] = useState(true);
+    const [focused,setFocused] = useState(false);
     
     
     const requestSearch = (searchedVal) => {
@@ -57,13 +57,13 @@ const CustomFilter = ({items,setItems,fullList}) => {
             setItems(_items);
     };
     const handleFocus = () => {
-        setFocused(false);
+        setFocused(true);
         // console.log(`Focus: ${focused}`)
         
         
     }
     const handleBlur = () => {
-        setFocused(true);
+        setFocused(false);
         // console.log(`Focus: ${focused}`);
         setSearched("");
         setItems(fullList);
@@ -79,6 +79,6 @@ const CustomFilter = ({items,setItems,fullList}) => {
     // console.log(`focused: ${focused}`)
     return (
 
-        <TextField value={searched} onChange={requestSearch} fullWidth size="small" sx={{marginTop:2}} placeholder="Filter" onFocus={handleFocus} onBlur={handleBlur}/>
+        <TextField focused={focused} value={searched} onChange={requestSearch} fullWidth size="small" sx={{marginTop:2}} placeholder="Filter" onFocus={handleFocus} onBlur={handleBlur}/>
         )
 }

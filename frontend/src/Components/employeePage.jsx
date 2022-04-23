@@ -1,13 +1,11 @@
-import { AppBar, Avatar, Button, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar,  Button, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, Tab, Tabs, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useMemo, useState } from "react"
-import { getEmployeesByCenterId } from "../api/employeeApi"
+import { getEmployeesByCenterId, updateKid } from "../api/employeeApi"
 import { getKidsByCenterId, getRoomsByCenterId } from "../api/roomsApi"
 import { ListWithSearch } from "./listWithSearch"
 import { RoomList } from "./models/Employee/roomList"
 import ResponsiveAppBar from "./NavBar"
-import { ParentCard } from "./Parent/parentCard"
-import sadFace from '../img/bad_face.jpg'
 import { BehaviorFace } from "./models/behaviorFace"
 import jwt_decoder from 'jwt-decode'
 import { useNavigate } from "react-router-dom"
@@ -44,8 +42,9 @@ export const EmployeePage = () => {
 
     const clearKids = () => {
         let _kids = [...kids];
-        _kids.map(kid => {
+        _kids.forEach(kid => {
             kid.room_id = -1;
+            updateKid(kid);
         })
         setKids(_kids);
     }
@@ -56,7 +55,7 @@ export const EmployeePage = () => {
         } catch {
             navigate("/Login");
         }
-    }, [])
+    }, [navigate])
 
     const handleTabChange = (event, newVal) => {
         setTabValue(newVal);
@@ -73,7 +72,7 @@ export const EmployeePage = () => {
         return emptyKids;
     }
 
-    let unassignedKids = useMemo(() => calculateUnAssignedKids(), [kids]);
+    let unassignedKids = useMemo(() => calculateUnAssignedKids(), [calculateUnAssignedKids]);
     let _kids = [];
     let _uncheckedInKids = [];
     useEffect(() => {
@@ -85,7 +84,7 @@ export const EmployeePage = () => {
             //     console.log(val)
             // })
 
-            console.log(x.data);
+            // console.log(x.data);
 
             for (let i in x.data) {
 
@@ -106,7 +105,7 @@ export const EmployeePage = () => {
         getEmployeesByCenterId(1).then(x => {
             //    debugger;
             // console.log("Children: ")
-            x.data.map(val => {
+            x.data.forEach(val => {
                 _employees.push(val)
                 // console.log(val)
             })
@@ -120,7 +119,7 @@ export const EmployeePage = () => {
     useEffect(() => {
         getRoomsByCenterId(1).then(x => {
             //    debugger;
-            x.data.map(val => {
+            x.data.forEach(val => {
                 _rooms.push(val)
             })
             //    console.log(_orgs);
@@ -130,6 +129,7 @@ export const EmployeePage = () => {
 
     const handleUnassignKid = (kid) => {
         _kids = [...kids];
+        kid.room_id = -1;
         // console.log("Childnrenzasdf")
         for (let i in _kids) {
             if (_kids[i].child_id === kid.child_id) {
@@ -137,6 +137,7 @@ export const EmployeePage = () => {
 
             }
         }
+        updateKid(kid);
         setKids(_kids);
         setAssignedDialogOpen(false);
     }
@@ -152,6 +153,7 @@ export const EmployeePage = () => {
                 break;
             }
         }
+        updateKid(kid);
         setKids(oldKids);
         setUnCheckedInKids(oldUnchecked);
 
@@ -168,6 +170,7 @@ export const EmployeePage = () => {
                 break;
             }
         }
+        updateKid(kid);
         setKids(oldKids);
         setUnCheckedInKids(oldUnchecked);
         setCheckedDialogOpen(false);
@@ -175,10 +178,11 @@ export const EmployeePage = () => {
     const handleCheckOutAll = () => {
         let oldKids = [...kids];
         let oldUnchecked = [...unCheckedInKids];
-        oldKids.map(kid => {
+        oldKids.forEach(kid => {
             kid.checked_in = false;
             kid.room_id = -1;
             oldUnchecked.push(kid);
+            updateKid(kid);
         });
         setKids([]);
         setUnCheckedInKids(oldUnchecked);

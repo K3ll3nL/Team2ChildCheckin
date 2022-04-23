@@ -10,13 +10,13 @@ export const ChildRoomSelector = ({ open, setOpen, kids, handleSelect, buttonLab
         setOpen(false);
     }
 
-    console.log(typeof(handleSelect))
+    // console.log(typeof(handleSelect))
     return (
         <Box sx={{ minWidth: "100%" }}>
             <Button variant="contained" fullWidth color={color} onClick={handleButtonClick} sx={sx}>{buttonLabel}</Button>
             <Dialog open={open} onClose={handleDialogClose} maxWidth="xs" fullWidth>
                 <DialogTitle sx={{paddingBottom:0,marginBottom:0}}>
-                    <Typography variant="h5">{dialogTitle}</Typography>
+                    <Typography sx={{fontSize:"1.5rem"}} >{dialogTitle}</Typography>
                 </DialogTitle>
                 <DialogContent dividers sx={{paddingTop:0,marginTop:0}}>
                 

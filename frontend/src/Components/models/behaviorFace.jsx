@@ -2,23 +2,27 @@ import { Avatar, IconButton } from "@mui/material"
 import happy_face from "../../img/happy_face.jpg"
 import sad_face from "../../img/bad_face.jpg"
 import medium_face from "../../img/medium_face.jpg"
-import { useState } from "react"
+import { updateKid } from "../../api/employeeApi"
 
 export const BehaviorFace = ({kid, setKids, kids,mutable=true, size=30}) => {
     // const [behavior,setBehavior] = useState(kid.behavior)
     let behavior = kid.behavior;
     const handleButtonClick = () => {
         let _kids =[...kids];
+        let _kid = {...kid};
 
         for(let i in _kids) {
             if(_kids[i].child_id === kid.child_id) {
                 if(_kids[i].behavior === 2) {
                     _kids[i].behavior = 0;
+                    _kid.behavior = 0
                 } else {
                     _kids[i].behavior = _kids[i].behavior + 1;
+                    _kid.behavior = _kid.behavior + 1; 
                 }
             }
         }
+        updateKid(kid);
         setKids(_kids);
     }
 
