@@ -1,12 +1,15 @@
-import { AppBar, Chip, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, ListSubheader, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar,  Button, createTheme, Grid, List, ListItem, ListItemButton, ListItemText, Tab, Tabs, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useMemo, useState } from "react"
-import { getEmployeesByCenterId } from "../api/employeeApi"
+import { getEmployeesByCenterId, updateKid } from "../api/employeeApi"
 import { getKidsByCenterId, getRoomsByCenterId } from "../api/roomsApi"
 import { ListWithSearch } from "./listWithSearch"
 import { RoomList } from "./models/Employee/roomList"
 import ResponsiveAppBar from "./NavBar"
-
+import { BehaviorFace } from "./models/behaviorFace"
+import jwt_decoder from 'jwt-decode'
+import { useNavigate } from "react-router-dom"
+import { ChildRoomSelector } from "./models/Employee/childRoomSelector"
 const theme = createTheme({
     palette: {
         primary: {
@@ -28,8 +31,32 @@ const theme = createTheme({
 
 export const EmployeePage = () => {
     const [kids, setKids] = useState([]);
-    const [tabValue,setTabValue] = useState(0);
-    const [employees,setEmployees] = useState([]);
+    const [unCheckedInKids, setUnCheckedInKids] = useState([]);
+    const [tabValue, setTabValue] = useState(0);
+    const [employees, setEmployees] = useState([]);
+    const [loggedInEmployee, setLoggedInEmployee] = useState({});
+    const [assignedDialogOpen, setAssignedDialogOpen] = useState(false);
+    const [checkedDialogOpen,setCheckedDialogOpen] = useState(false);
+    const navigate = useNavigate();
+
+
+    const clearKids = () => {
+        let _kids = [...kids];
+        _kids.forEach(kid => {
+            kid.room_id = -1;
+            updateKid(kid);
+        })
+        setKids(_kids);
+    }
+    useEffect(() => {
+        try {
+            const _employee = jwt_decoder(sessionStorage.getItem("jwt"));
+            setLoggedInEmployee(_employee);
+        } catch {
+            navigate("/Login");
+        }
+    }, [navigate])
+
     const handleTabChange = (event, newVal) => {
         setTabValue(newVal);
     }
@@ -37,25 +64,39 @@ export const EmployeePage = () => {
     const calculateUnAssignedKids = () => {
         let emptyKids = [];
         for (let i in kids) {
-            if(kids[i].room_id === -1) {
+            if (kids[i].room_id === -1) {
                 emptyKids.push(kids[i]);
-    
+
             }
         }
         return emptyKids;
     }
 
-    let unassignedKids = useMemo( () => calculateUnAssignedKids(),[kids]);
+    let unassignedKids = useMemo(() => calculateUnAssignedKids(), [calculateUnAssignedKids]);
     let _kids = [];
+    let _uncheckedInKids = [];
     useEffect(() => {
         getKidsByCenterId(1).then(x => {
             //    debugger;
             // console.log("Children: ")
-            x.data.map(val => {
-                _kids.push(val)
-                // console.log(val)
-            })
+            // x.data.map(val => {
+            //     _kids.push(val)
+            //     console.log(val)
+            // })
+
+            // console.log(x.data);
+
+            for (let i in x.data) {
+
+                if (x.data[i].checked_in) {
+                    _kids.push(x.data[i]);
+                } else {
+                    _uncheckedInKids.push(x.data[i]);
+                }
+            }
+
             //    console.log(_orgs);
+            setUnCheckedInKids(_uncheckedInKids);
             setKids(_kids);
         });
     }, []);
@@ -64,7 +105,7 @@ export const EmployeePage = () => {
         getEmployeesByCenterId(1).then(x => {
             //    debugger;
             // console.log("Children: ")
-            x.data.map(val => {
+            x.data.forEach(val => {
                 _employees.push(val)
                 // console.log(val)
             })
@@ -78,7 +119,7 @@ export const EmployeePage = () => {
     useEffect(() => {
         getRoomsByCenterId(1).then(x => {
             //    debugger;
-            x.data.map(val => {
+            x.data.forEach(val => {
                 _rooms.push(val)
             })
             //    console.log(_orgs);
@@ -86,30 +127,110 @@ export const EmployeePage = () => {
         });
     }, []);
 
+    const handleUnassignKid = (kid) => {
+        _kids = [...kids];
+        kid.room_id = -1;
+        // console.log("Childnrenzasdf")
+        for (let i in _kids) {
+            if (_kids[i].child_id === kid.child_id) {
+                _kids[i].room_id = -1;
+
+            }
+        }
+        updateKid(kid);
+        setKids(_kids);
+        setAssignedDialogOpen(false);
+    }
+
+    const handleCheckIn = (kid) => {
+        kid.checked_in = true;
+        let oldUnchecked = [...unCheckedInKids];
+        let oldKids = [...kids];
+        oldKids.push(kid);
+        for (let i in oldUnchecked) {
+            if (oldUnchecked[i].child_id === kid.child_id) {
+                oldUnchecked.splice(i, 1);
+                break;
+            }
+        }
+        updateKid(kid);
+        setKids(oldKids);
+        setUnCheckedInKids(oldUnchecked);
+
+    }
+    const handleCheckOut = (kid) => {
+        kid.checked_in = false;
+        kid.room_id = -1;
+        let oldUnchecked = [...unCheckedInKids];
+        let oldKids = [...kids];
+        oldUnchecked.push(kid);
+        for (let i in oldKids) {
+            if (oldKids[i].child_id === kid.child_id) {
+                oldKids.splice(i, 1);
+                break;
+            }
+        }
+        updateKid(kid);
+        setKids(oldKids);
+        setUnCheckedInKids(oldUnchecked);
+        setCheckedDialogOpen(false);
+    }
+    const handleCheckOutAll = () => {
+        let oldKids = [...kids];
+        let oldUnchecked = [...unCheckedInKids];
+        oldKids.forEach(kid => {
+            kid.checked_in = false;
+            kid.room_id = -1;
+            oldUnchecked.push(kid);
+            updateKid(kid);
+        });
+        setKids([]);
+        setUnCheckedInKids(oldUnchecked);
+    }
     return (
         <Box>
 
             <ResponsiveAppBar></ResponsiveAppBar>
-            <Grid container sx={{margin: 1}} spacing={2}>
-                <Grid item xs={4}>
+
+
+            <Grid container sx={{ padding: 1.5 }} spacing={2} columns={12}>
+                <Grid item xs={12} sm={12} md={12} lg={4}>
+
                     <AppBar position="static" theme={theme} >
-                        <Tabs value={tabValue} onChange={handleTabChange}  textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#FFFFFB"}}}>
+                        <Tabs value={tabValue} onChange={handleTabChange} textColor="inherit" TabIndicatorProps={{ style: { backgroundColor: "#FFFFFB" } }} variant="fullWidth">
                             <Tab label="Unassigned Children"/>
-                            <Tab label="Find Child"/>
+                            <Tab label="Find Child" />
+                            <Tab label="Check in" />
                         </Tabs>
                     </AppBar>
                     <TabPanel value={tabValue} index={0}>
+                        <Button variant="contained" fullWidth onClick={clearKids} sx={{ marginBottom: 1, marginTop: 1 }}>Unassign All Children</Button>
+                        <ChildRoomSelector 
+                            open={assignedDialogOpen} 
+                            handleSelect={handleUnassignKid} 
+                            setOpen={setAssignedDialogOpen} 
+                            kids={kids} 
+                            buttonLabel="Unassign child" 
+                            dialogTitle={`Unassign a Child`} 
+                            roomId={-1} 
+                            emptyMessage="All children are unassigned"
+                        />
+                        <hr></hr>
+                        {
+                            unassignedKids.length === 0 && <Typography align="center" color="#9e9e9e">No unassigned children</Typography>
+                        }
                         <List>
                             {
                                 unassignedKids.map(kid => (
 
-                                    <ListItem divider>
+                                    <ListItem divider key={kid.child_id}>
                                         <ListItemButton>
-        
+
                                             <ListItemText primary={kid.name} />
-                                            
+
                                         </ListItemButton>
-        
+                                        <BehaviorFace kid={kid} mutable={false} />
+
                                     </ListItem>
                                 ))
                             }
@@ -117,20 +238,51 @@ export const EmployeePage = () => {
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
                         <ListWithSearch valToList={kids} attributeToDisplay="name" chipAttributeValue="room_id" chipValToList={rooms} chipValToDisplay="room_name">
-                            
+
                         </ListWithSearch>
                     </TabPanel>
+                    <TabPanel value={tabValue} index={2}>
+                            <Button variant="contained" fullWidth sx={{marginTop:1,marginBottom:1}} onClick={handleCheckOutAll}>Check out All children</Button>
+                            <ChildRoomSelector
+                                open={checkedDialogOpen}
+                                setOpen={setCheckedDialogOpen}
+                                handleSelect={handleCheckOut} 
+                                kids={kids} 
+                                buttonLabel="Check Out Child" 
+                                dialogTitle={`Check out a child`}
+                                emptyMessage="No children to check out"
+                             />
+                            <hr></hr>
+                            {
+                                unCheckedInKids.length === 0 && <Typography align="center" color="#9e9e9e">All Children are checked in</Typography>
+                            }
+                        {
+                            unCheckedInKids.map(kid => (
+
+                                <ListItem divider key={kid.child_id}>
+
+
+                                    <ListItemText primary={kid.name} />
+                                    <Button variant="contained" onClick={() => handleCheckIn(kid)}>Check In</Button>
+
+                                    {/* <BehaviorFace kid={kid} mutable={false}/> */}
+
+                                </ListItem>
+                            ))
+                        }
+                    </TabPanel>
                 </Grid>
-                <Grid item xs={8}>
-                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees}/>
+                <Grid item xs={12} sm={12} md={12} lg={8}>
+                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees} loggedInEmployee={loggedInEmployee} />
                 </Grid>
             </Grid>
+
         </Box>
     )
 }
 
-const TabPanel = ({children,value,index}) => {
-    return(
+const TabPanel = ({ children, value, index }) => {
+    return (
         <>
             {
                 value === index && (

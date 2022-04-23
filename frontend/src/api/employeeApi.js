@@ -13,3 +13,25 @@ export const getEmployeesByCenterId = (centerId) => new Promise((resolve, reject
         });
     
 });
+
+export const updateKid =(kid) => new Promise((resolve,reject) => {
+
+    axios.put(`${URL}/kids/${kid.child_id}`,kid)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });    
+
+});
+
+export const updateEmployeeRoom = (employee) => new Promise((resolve,reject) => {
+
+    axios.put(`${URL}/employees/${employee.employee_id}`,employee)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });    
+
+});
