@@ -141,7 +141,7 @@ export const EmployeePage = () => {
                         </Tabs>
                     </AppBar>
                     <TabPanel value={tabValue} index={0}>
-                        <Button variant="contained" fullWidth onClick={clearKids} sx={{marginBottom:1,marginTop:1}}>clear assigned kids</Button>
+                        <Button variant="contained" fullWidth onClick={clearKids} sx={{marginBottom:1,marginTop:1}}>clear assigned children</Button>
                         <ChildRoomSelector open={dialogOpen} handleAddKid={handleUnassignKid} setOpen={setDialogOpen} kids={kids} buttonLabel="Unassign child" dialogTitle={`Unassign a Child`} />
                         <hr></hr>
                         <List>
@@ -168,7 +168,7 @@ export const EmployeePage = () => {
                     </TabPanel>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={8}>
-                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees}/>
+                    <RoomList centerId={1} kids={kids} setKids={setKids} rooms={rooms} setRooms={setRooms} employees={employees} setEmployees={setEmployees} loggedInEmployee={loggedInEmployee}/>
                 </Grid>
             </Grid>
         

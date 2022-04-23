@@ -48,20 +48,20 @@ const CustomFilter = ({items,setItems,fullList}) => {
             setSearched(searchedVal.target.value);
             
             let _items =fullList.filter(x => x.name.toLowerCase().includes(searchedVal.target.value.toLowerCase()));
-            console.log(`searched: ${searched}`)
-            console.log(`targetValue: ${searchedVal.target.value}`)
-            console.log(_items);
+            // console.log(`searched: ${searched}`)
+            // console.log(`targetValue: ${searchedVal.target.value}`)
+            // console.log(_items);
             setItems(_items);
     };
     const handleFocus = () => {
         setFocused(false);
-        console.log(`Focus: ${focused}`)
+        // console.log(`Focus: ${focused}`)
         
         
     }
     const handleBlur = () => {
         setFocused(true);
-        console.log(`Focus: ${focused}`);
+        // console.log(`Focus: ${focused}`);
         setSearched("");
         setItems(fullList);
     }

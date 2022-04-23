@@ -6,7 +6,7 @@ import { BehaviorFace } from "../behaviorFace";
 import { ChildRoomSelector } from "./childRoomSelector";
 
 
-export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,setEmployees }) => {
+export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,setEmployees,loggedInEmployee }) => {
     
       const [dialogOpen,setDialogOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState({});
@@ -37,6 +37,18 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
         }
         setKids(_kids);
         setDialogOpen(false);
+    }
+    const handleAddEmployee= () => {
+        // console.log("Switching Employees")
+        let _employees = [...employees];
+        // console.log("Childnrenzasdf")
+        for (let i in _employees) {
+            if(_employees[i].employee_id === loggedInEmployee.user_id) {
+                _employees[i].room_id = roomId;
+                // console.log(_employees[i]);
+            }
+        }
+        setEmployees(_employees);
     }
     const test = () => {
         console.log("Button was clicked")
@@ -71,14 +83,14 @@ export const RoomCard = ({ roomId, roomName, setKids, kids,centerId,employees,se
                 <Box sx={{marginTop: 1}}>
 
 
-                    <Button variant="contained" color={setButtonColor()} size="small">Join This Room</Button>
+                    <Button variant="contained" color={setButtonColor()} size="small" onClick={handleAddEmployee}>Join This Room</Button>
                     <hr></hr>
                 </Box>
             
             )
         }
     }
-        console.log(`Kids: ${typeof (kids)}`)
+        // console.log(`Kids: ${typeof (kids)}`)
     return (
         <Card sx={{minWidth:250}}>
             <CardHeader title={roomName} subheader={determineSubHeader()} sx={{margin:0,paddingBottom:0}}/>

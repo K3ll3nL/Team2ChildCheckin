@@ -622,6 +622,8 @@ module.exports = function routes(app, logger) {
                 connection.release();
                 const token = jwt.sign({
                   user_id: rows[0].employee_id,
+                  center_id: rows[0].center_id,
+                  name: rows[0].name,
                   is_employee: true,
                 }, accessTokenSecret, {
                   expiresIn: '1h'
@@ -642,6 +644,8 @@ module.exports = function routes(app, logger) {
                     if (rows.length > 0) {
                       const token = jwt.sign({
                         user_id: rows[0].parent_id,
+                        center_id: rows[0].center_id,
+                        name: rows[0].name,
                         is_employee: false,
                       }, accessTokenSecret, {
                         expiresIn: '1h'
