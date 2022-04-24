@@ -1017,7 +1017,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query(`SELECT * FROM note WHERE child_id = ?`, [req.params.child_id], function (err, rows, fields) {
+        connection.query(`SELECT * FROM notes WHERE child_id = ?`, [req.params.child_id], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
