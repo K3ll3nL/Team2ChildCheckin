@@ -1007,4 +1007,31 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //GET /notes/:child_id
+  //returns the notes of a given child
+  app.get('/notes/:child_id', (req, res) => {
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM note WHERE child_id = ?`, [req.params.child_id], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
 }
