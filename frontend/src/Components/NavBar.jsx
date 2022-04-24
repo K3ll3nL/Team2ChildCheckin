@@ -12,6 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom'
+import logo from '../img/Kid-Watchers-500.png'
+import hamburgerMenu from '../img/hamburger-menu.png'
 import jwt_decoder from 'jwt-decode'
 const pages = [
     {
@@ -93,36 +95,46 @@ const ResponsiveAppBar = () => {
         <AppBar position="static" theme={theme}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Typography
+                    {/* <Typography
                         variant="h6"
                         noWrap
                         component="div"
                         sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                     >
                         LOGO
-                    </Typography>
-
-                    <Typography
+                    </Typography> */}
+                    <img src={logo} style={{maxHeight:"4rem"}} ></img>
+                    {/* <Typography
                         variant="h6"
                         noWrap
                         component="div"
                         sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}
                     >
                         LOGO
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="h6" noWrap component="div">
                         Child Checkin
                     </Typography>
+                    {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Link sx={{margin: 2}} href={page.link} color="inherit" underline="hover">{page.displayName}</Link>
-                        ))}
+                        {
+                            !user && <Button  sx={{margin:1}} onClick={() => navigate('/Login')} theme={theme} color="secondary">Login</Button>
+                        }
+                        {
+                            !user && <Button  sx={{margin:1}} onClick={() => navigate('/Registration')} theme={theme} color="secondary">Register</Button>
+
+                        }
+                        {
+                            user && <Button sx={{margin:1}}  onClick={()=> navigate(user.is_employee ? '/roomList' : '/parentPage') } theme={theme} color="secondary">Dashboard</Button>
+                        }
                     </Box>
+
+                    }
                  
-                    {user && <Box sx={{ flexGrow: 0, justifyContent: 'flex-end' }}>
+                    {<Box sx={{ flexGrow: 1, justifyContent: 'flex-end', display: {xs:'flex',md:'none'} }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <img alt="Remy Sharp" src={hamburgerMenu}  style={{maxHeight:"2.5rem"}} />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -141,16 +153,36 @@ const ResponsiveAppBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            
-                                <MenuItem key="dashboard" onClick={handleDashboard}>
+                            {
+                               user && <MenuItem key="dashboard" onClick={handleDashboard}>
                                     <Typography textAlign="center">Dashboard</Typography>
                                 </MenuItem>
-                                <MenuItem key="Logout" onClick={handleLogout}>
+
+                            }
+                            {
+                                user&& <MenuItem key="Logout" onClick={handleLogout}>
                                     <Typography textAlign="center">Logout</Typography>
                                 </MenuItem>
+
+                            }
+                            {
+                                !user && <MenuItem key="Login" onClick={() => navigate('/Login')}>
+                                <Typography textAlign="center">Login</Typography>
+                            </MenuItem> 
+                            }
+                            {
+                                !user && <MenuItem key="Login" onClick={() => navigate('/Registration')}>
+                                <Typography textAlign="center">Register</Typography>
+                            </MenuItem> 
+                            }
                             
                         </Menu>
                     </Box>}
+                    {
+                       user && <Button variant="outlined" theme={theme} color="secondary" sx={{display: {xs:'none',md:'flex'}}} onClick={handleLogout} >Logout</Button>
+
+                    }
+                    
                 </Toolbar>
             </Container>
         </AppBar>
