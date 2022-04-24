@@ -10,6 +10,7 @@ import { BehaviorFace } from "./models/behaviorFace"
 import jwt_decoder from 'jwt-decode'
 import { useNavigate } from "react-router-dom"
 import { ChildRoomSelector } from "./models/Employee/childRoomSelector"
+import { ChildInformationPopUp } from "./models/Employee/childInformationPopup"
 const theme = createTheme({
     palette: {
         primary: {
@@ -38,7 +39,13 @@ export const EmployeePage = () => {
     const [assignedDialogOpen, setAssignedDialogOpen] = useState(false);
     const [checkedDialogOpen,setCheckedDialogOpen] = useState(false);
     const navigate = useNavigate();
-
+    const [kidToDisplay,setKidToDisplay] = useState({
+        name: "Default Name",
+        age: 0,
+        health: "Default Health",
+        notes: "Default Notes"
+    });
+    const [kidInfoOpen,setKidInfoOpen] = useState(false);
 
     const clearKids = () => {
         let _kids = [...kids];
@@ -178,6 +185,12 @@ export const EmployeePage = () => {
         setUnCheckedInKids(oldUnchecked);
         setCheckedDialogOpen(false);
     }
+
+    const handleKidInfoDisplay = (kid) => {
+        setKidToDisplay(kid);
+        setKidInfoOpen(true);
+    }
+
     const handleCheckOutAll = () => {
         let oldKids = [...kids];
         let oldUnchecked = [...unCheckedInKids];
@@ -219,6 +232,7 @@ export const EmployeePage = () => {
                             emptyMessage="All children are unassigned"
                         />
                         <hr></hr>
+                        <ChildInformationPopUp kid={kidToDisplay} open={kidInfoOpen} setOpen={setKidInfoOpen} />
                         {
                             unassignedKids.length === 0 && <Typography align="center" color="#9e9e9e">No unassigned children</Typography>
                         }
@@ -227,7 +241,7 @@ export const EmployeePage = () => {
                                 unassignedKids.map(kid => (
 
                                     <ListItem divider key={kid.child_id}>
-                                        <ListItemButton>
+                                        <ListItemButton onClick={() => handleKidInfoDisplay(kid)}>
 
                                             <ListItemText primary={kid.name} />
 

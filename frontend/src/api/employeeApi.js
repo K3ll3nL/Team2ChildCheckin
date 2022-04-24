@@ -35,3 +35,14 @@ export const updateEmployeeRoom = (employee) => new Promise((resolve,reject) => 
         });    
 
 });
+
+export const getNotesByKidId = (kidId) => new Promise((resolve,reject) => {
+
+    axios.get(`${URL}/notes/${kidId}`)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });    
+
+});
