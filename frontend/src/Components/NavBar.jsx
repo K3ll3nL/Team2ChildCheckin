@@ -171,7 +171,7 @@ const ResponsiveAppBar = () => {
                             </MenuItem> 
                             }
                             {
-                                !user && <MenuItem key="Login" onClick={() => navigate('/Registration')}>
+                                !user && <MenuItem key="Register" onClick={() => navigate('/Registration')}>
                                 <Typography textAlign="center">Register</Typography>
                             </MenuItem> 
                             }
