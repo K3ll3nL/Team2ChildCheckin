@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import Button from '@mui/material/Button';
+import { Rating } from '@mui/material';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -30,9 +31,9 @@ export const DaycareCard = ({daycare}) => {
     >
       <Grid container spacing={2}>
         <Grid item>
-          <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="complex" src="https://picsum.photos/200" />
-          </ButtonBase>
+          
+            <Img alt="complex" src={daycare.image_url} sx={{height:175,width:200}} />
+          
         </Grid>
         <Grid item xs={12} sm container>
           <Grid item xs container direction="column" spacing={2}>
@@ -55,7 +56,7 @@ export const DaycareCard = ({daycare}) => {
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              5/5
+              <Rating value={2} readOnly ></Rating>
             </Typography>
           </Grid>
         </Grid>
