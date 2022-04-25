@@ -3,6 +3,7 @@ import { DaycareBanner } from './daycareBanner';
 
 import { ParentCard } from './parentCard';
 import ResponsiveAppBar from '../NavBar';
+
 import { useEffect, useState } from "react";
 import { getKids, getDaycare } from "..//..//api/parentApi";
 import jwt_decoder from 'jwt-decode';
@@ -21,25 +22,27 @@ export const ParentPage = () => {
     return <>
         {console.log(jwt_decoder(sessionStorage.getItem('jwt')).user_id)}
         <ResponsiveAppBar />
-        <DaycareBanner daycareName={daycare} setDaycare={setDaycare} />
-        <Grid container spacing={2}>
+        <DaycareBanner daycareName={daycare} setDaycare={setDaycare} sx={{ marginBottom: 10 }} />
+        <Grid container spacing={2} sx={{ marginTop: 2 }}>
 
 
             {kids["rows"] && kids["rows"].map((kid, index) =>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <ParentCard child={kid} />
                 </Grid>
             )}
 
-        </Grid>
-        <Grid
+            <Grid
                 container
+                spacing={0}
                 alignItems="center"
                 justifyContent="center"
-                sx={{ mt: 3 }}
             >
-                <AddChildForm kids= {kids} setKids={setKids} />
+                <AddChildForm setKids={setKids} />
             </Grid>
-    </>;
+
+            </Grid>
+
+        </>;
 }
-export default ParentPage;
+        export default ParentPage;
