@@ -2,10 +2,10 @@ import axios from 'axios'
 const apiEndpoint = `http://0.0.0.0:8000/parents/parent_id/kids`;
 const URL = "http://localhost:8000";
 
-export const getKids = () => new Promise((resolve, reject) => {
+export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
     console.log("here")
-    axios.get(`${URL}/parents/parent_id/kids?parent_id=${2}`)
+    axios.get(`${URL}/parents/parent_id/kids?parent_id=${parent_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
@@ -68,6 +68,33 @@ export const removeDaycare = (parent_id) => new Promise((resolve, reject) => {
     }
     // console.log(config.body);
     axios.put(`${URL}/parents/parent_id/removeCenter`, config.body)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });
+});
+
+export const addDaycare = (parent_id,center_id) => new Promise((resolve, reject) => {
+    const config = {
+        body: {
+            "parent_id": parent_id,
+            "center_id": center_id
+        }
+    }
+    // console.log(config.body);
+    axios.put(`${URL}/parents/parent_id/updateCenter`, config.body)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });
+});
+
+export const getDaycareID = (parent_id) => new Promise((resolve, reject) => {
+    
+    // console.log(config.body);
+    axios.get(`${URL}/centerByParent_id?parent_id=${parent_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);

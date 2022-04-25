@@ -3,14 +3,36 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
-import { getDaycare, removeDaycare } from "..//..//api/parentApi";
+import { getDaycare, getDaycareID, removeDaycare } from "..//..//api/parentApi";
 import jwt_decoder from 'jwt-decode';
 import { useNavigate } from "react-router-dom"
+import { useEffect } from 'react';
 
 
-export const DaycareBanner = ({daycareName,setDaycare}) => {
+export const DaycareBanner = () => {
     const navigate = useNavigate();
 
+    // const [daycare, setDaycare] = React.useState("daycareName");
+    // const [daycareID, setDaycareID] = React.useState("daycareID");
+    // const [user, setUser] = React.useState("user");
+    useEffect(() => {
+        let id= jwt_decoder(sessionStorage.getItem('jwt')).user_id;
+        // setUser(jwt_decoder(sessionStorage.getItem('jwt')).user_id);
+        console.log("user id", id);
+        // getDaycareID(id).then(x => setDaycareID(x));
+        // console.log(getDaycare(id));
+        console.log("daycare", getDaycare(id));
+        getDaycare(id).then(x => sessionStorage.setItem('daycare', (x.data[0].name)));
+        
+        console.log(sessionStorage.getItem('daycare'));
+        // (getDaycare(id)).then(x => setDaycare(x));
+        // console.log("daycare", daycare);
+        // console.log("daycare id", daycareID);
+        // console.log("daycareID", daycareID);
+        // console.log("daycare", daycare);
+    }, []);
+
+   
     return <>
 
 
@@ -24,8 +46,8 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
             <Grid item xs={12} sx={{ mt: 2 }}>
 
                 <Typography variant="h4" gutterBottom>
-                    {console.log(daycareName)}
-                    {daycareName.data&&daycareName.data[0].name}
+                    {sessionStorage.getItem('daycare')}
+                    {/* {daycareName.data&&daycareName.data[0].name} */}
                     {/* {removeDaycare()} */}
                 </Typography>
 
@@ -35,7 +57,7 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
                     onClick={() => {
                         removeDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id);
                         // console.log(setDaycare);
-                        setDaycare(getDaycare(jwt_decoder(sessionStorage.getItem('jwt')).center_id));
+                        // setDaycare(getDaycare(jwt_decoder(sessionStorage.getItem('jwt')).center_id));
 
                     }} 
                 variant="contained">

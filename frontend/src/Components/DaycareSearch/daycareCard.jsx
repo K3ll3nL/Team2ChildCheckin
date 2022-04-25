@@ -5,6 +5,8 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import Button from '@mui/material/Button';
+import jwt_decoder from 'jwt-decode';
+import { addDaycare,getDaycare } from '../../api/parentApi';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -18,6 +20,7 @@ export const DaycareCard = ({daycare}) => {
 
 
     return<>
+    {console.log(daycare)}
     <Paper
       sx={{
         p: 2,
@@ -48,7 +51,13 @@ export const DaycareCard = ({daycare}) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Button >
+                
+              <Button
+              onClick={() => {
+                addDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id,daycare.center_id);
+
+            }} >
+              
                 Join This Daycare
               </Button>
             </Grid>
