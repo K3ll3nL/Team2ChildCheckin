@@ -1183,9 +1183,9 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  //GET /rooms/:room_id
-  //returns the rooms of a given center
-  app.get('/rooms/:room_id', (req, res) => {
+  //GET /roomInfo/:room_id
+  //returns details of a given room
+  app.get('/roomInfo/:room_id', (req, res) => {
     pool.getConnection(function (err, connection){
       if(err){
         // if there is an issue obtaining a connection, release the connection instance and log the error
