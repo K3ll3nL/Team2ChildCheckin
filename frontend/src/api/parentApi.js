@@ -4,7 +4,6 @@ const URL = "http://localhost:8000";
 
 export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
-    
     axios.get(`${URL}/parents/parent_id/kids?parent_id=${parent_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
