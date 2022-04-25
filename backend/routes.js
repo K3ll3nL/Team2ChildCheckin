@@ -150,6 +150,38 @@ module.exports = function routes(app, logger) {
     });
   });
 
+<<<<<<< Updated upstream
+=======
+  // GET/employee/:child_id
+  // returns the employee watching child of child_id
+  app.get('/employee/:child_id', (req, res) => {
+    var child_id = req.param('child_id');
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT employee.employee_id, employee.name, employee.username, employee.password, employee.email, employee.center_id, employee.room_id FROM employee JOIN room r on employee.room_id = r.room_id JOIN child c on r.room_id = c.room_id WHERE c.child_id = ${child_id}`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+>>>>>>> Stashed changes
   // GET/parents
   // returns all parent information
   app.get('/parents/', (req, res) => {
@@ -210,6 +242,37 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  //GET /parents/:child_id
+  // returns the parent information related to child of child_id
+  app.get('/parents/:child_id', (req, res) => {
+    var child_id = req.param('child_id');
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`SELECT * FROM parent JOIN child c on parent.parent_id = c.parent_id WHERE child_id = 1`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+
 
   // GET all child information
   // /api/parents/{parentID}/kids
@@ -330,6 +393,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
+<<<<<<< Updated upstream
 
   // app.get('/roomsById', (req, res) => {
   //   // obtain a connection from our pool of connections
@@ -408,6 +472,9 @@ module.exports = function routes(app, logger) {
   //     }
   //   });
   // });
+=======
+  
+>>>>>>> Stashed changes
 
   // POST/rooms/
   // Adds a new room to the database
