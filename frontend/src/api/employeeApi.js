@@ -46,3 +46,14 @@ export const getNotesByKidId = (kidId) => new Promise((resolve,reject) => {
         });    
 
 });
+
+export const addNote = (note) => new Promise((resolve,reject) => {
+
+    axios.post(`${URL}/notes/${note.child_id}`,note)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });    
+
+});

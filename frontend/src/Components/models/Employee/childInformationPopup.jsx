@@ -1,12 +1,14 @@
-import { Chip, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material"
+import { Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react"
-import { getNotesByKidId } from "../../../api/employeeApi";
+import { addNote, getNotesByKidId } from "../../../api/employeeApi";
 
 
 
 export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
 
     const [childNotes,setChildNotes] = useState([]);
+    const [noteToAdd,setNoteToAdd] = useState("");
     useEffect(() => {
         getNotesByKidId(kid.child_id).then(x=> {
             // console.log(`child_id: ${kid.child_id}`)
@@ -15,6 +17,23 @@ export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
             setChildNotes(x.data);
         })
     },[kid])
+
+    const handleNoteAdded = () => {
+        console.log(childNotes)
+        let _childNotes = [...childNotes];
+        _childNotes.push({
+            child_id: kid.child_id,
+            note: noteToAdd
+        });
+        setNoteToAdd("");
+        console.log(noteToAdd);
+        setChildNotes(_childNotes);
+        addNote({
+            child_id: kid.child_id,
+            note: noteToAdd
+        });
+    }
+
 
     // console.log(childNotes);
     return <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xs">
@@ -35,10 +54,22 @@ export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
             <Typography display={"inline"}>Notes:</Typography>
             {
                 childNotes.map(note => (
-                    <Chip key={note} label={note['note']} sx={{ marginLeft: 1,height:20 }} />
+                    <Chip key={note['note']} label={note['note']} sx={{ marginLeft: 1,height:20 }} />
                 ))
             }
         </DialogContent>
+        <DialogActions>
+            <Grid container>
+                <Grid item xs={8}>
+
+                <TextField size="small" label="Note" fullWidth value={noteToAdd} onChange={(e) => setNoteToAdd(e.target.value)} />
+                </Grid>
+                <Grid item xs={4}>
+
+                <Button variant="contained" fullWidth onClick={handleNoteAdded} >Add Note</Button>
+                </Grid>
+            </Grid>
+        </DialogActions>
     </Dialog>
 
 }
