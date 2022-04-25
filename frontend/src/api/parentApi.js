@@ -14,10 +14,10 @@ export const getKids = () => new Promise((resolve, reject) => {
 
 });
 
-export const getDaycare = () => new Promise((resolve, reject) => {
+export const getDaycare = (daycare_id) => new Promise((resolve, reject) => {
 
     console.log("here")
-    axios.get(`${URL}/centers/center_id/name?center_id=${1}`)
+    axios.get(`${URL}/centers/center_id/name?center_id=${daycare_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
@@ -60,10 +60,10 @@ export const login = (user) => new Promise((resolve, reject) => {
         });
 
 });
-export const removeDaycare = () => new Promise((resolve, reject) => {
+export const removeDaycare = (parent_id) => new Promise((resolve, reject) => {
     const config = {
         body: {
-            "parent_id": 2
+            "parent_id": parent_id
         }
     }
     // console.log(config.body);
