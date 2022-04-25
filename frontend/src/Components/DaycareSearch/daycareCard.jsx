@@ -11,6 +11,8 @@ import { Rating } from '@mui/material';
 import { DaycareReviews } from './daycareReviews';
 import { getDaycareReviews } from '../../api/daycareApi';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Img = styled('img')({
     margin: 'auto',
@@ -20,12 +22,17 @@ const Img = styled('img')({
   });
 
 export const DaycareCard = ({daycare}) => {
+
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
     getDaycareReviews(daycare.center_id).then(x => {
       setReviews(x.data)})
     }, [])
     const review_avg = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
+
+
+  const navigate = useNavigate();
+
 
 
     return<>
@@ -63,7 +70,17 @@ export const DaycareCard = ({daycare}) => {
                 
               <Button
               onClick={() => {
-                addDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id,daycare.center_id);
+                try {
+                  addDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id,daycare.center_id).then(() => {
+                    console.log("Should be navigating...");
+                    navigate("/ParentPage")
+                  });
+                  navigate("/ParentPage")
+                } catch {
+                  navigate("/Login")
+                }
+                
+                
 
             }} >
               

@@ -15,6 +15,7 @@ export const RegistrationPage = () => {
     const [email, setEmail] = useState('');
     const [isEmployee,setIsEmployee] = useState(false);
     const [organization,setOrganization] = useState('');
+    const [name,setName] = useState("Default Name");
     const navigate = useNavigate();
 
 
@@ -34,6 +35,9 @@ export const RegistrationPage = () => {
     const handleIsEmployee = () => {
         setIsEmployee(!isEmployee);
     }
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    }
     
     
     const handleButtonClick = () => {
@@ -50,6 +54,7 @@ export const RegistrationPage = () => {
                 password: password,
                 email: email,
                 is_employee: isEmployee,
+                name: name,
                 center_id: isEmployee ? fullOrgs.find(x => x["name"] === organization)["center_id"] : -1
             }
             
@@ -61,6 +66,10 @@ export const RegistrationPage = () => {
 
                 console.log(jwt_decoder(jwt.token));
                 sessionStorage.setItem("jwt",jwt.token);
+
+                
+            }).then( () => {
+                isEmployee ? navigate("/RoomList") : navigate("/ParentPage");
             })
             // console.log("Jwt: ") 
             // console.log(jwt);
@@ -103,6 +112,7 @@ export const RegistrationPage = () => {
                                 <TextField id="username" required label="Username" variant="outlined" onChange={handleUserChange} margin="normal" sx={{ display: "block" }}/>
                                 <TextField id="password" required label="Password" className="" variant="outlined" type="password" margin="normal" sx={{ display: "block" }} onChange={handlePassChange} />
                                 <TextField id="email" label="Email" className="" variant="outlined"  margin="normal" sx={{ display: "block" }} onChange={handleEmailChange} />
+                                <TextField id="name" label="Name" className="" variant="outlined"  margin="normal" sx={{ display: "block" }} onChange={handleNameChange} />
                                 <FormGroup>
                                     
                                     <FormControlLabel control={<Checkbox onClick={handleIsEmployee}/>} label="Are you an employee?" />
