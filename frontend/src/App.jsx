@@ -26,6 +26,7 @@ function App () {
           <Route path='/EmployeeCard' element={<EmployeeCard />} />
           <Route path='/ParentPage' element={<ParentPage />} />
           <Route path='/RoomList' element={<EmployeePage />} />
+          <Route path='/FindDaycare' element={<DaycarePage />} />
           <Route path='*' element={<ResponsiveAppBar />} />
         </Routes>
 

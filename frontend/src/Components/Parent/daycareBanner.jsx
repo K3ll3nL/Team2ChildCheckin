@@ -5,8 +5,12 @@ import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import { getDaycare, removeDaycare } from "..//..//api/parentApi";
 import jwt_decoder from 'jwt-decode';
+import { useNavigate } from "react-router-dom"
+
 
 export const DaycareBanner = ({daycareName,setDaycare}) => {
+    const navigate = useNavigate();
+
     return <>
 
 
@@ -39,7 +43,8 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
                 </Button>
             </Grid>
             <Grid item xs={6} sx={{ mb: 3 }}>
-                <Button variant="contained" disableElevation>
+                <Button onClick={() => navigate("/FindDaycare")}
+                variant="contained" disableElevation>
                     Find New Daycare
                 </Button>
             </Grid>
