@@ -34,8 +34,8 @@ export const ParentCard = ({child}) => {
 
   return <>
 
-    <Box sx={{m:5}}>
-      <Card variant="outlined" sx={{ minWidth: 275 , boxShadow: 2 }}>
+    <Box sx={{margin:2}}>
+      <Card variant="outlined" sx={{ minWidth: 250 , boxShadow: 2 }}>
         <CardContent >
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {child.name}

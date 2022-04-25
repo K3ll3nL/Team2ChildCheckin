@@ -21,12 +21,12 @@ export const ParentPage = () => {
     return <>
         {console.log(jwt_decoder(sessionStorage.getItem('jwt')).user_id)}
         <ResponsiveAppBar />
-        <DaycareBanner daycareName={daycare} setDaycare={setDaycare}/>
-        <Grid container spacing={2}>
+        <DaycareBanner daycareName={daycare} setDaycare={setDaycare} sx={{marginBottom:10}}/>
+        <Grid container spacing={2} sx={{marginTop:2}}>
             
 
                 {kids["rows"] && kids["rows"].map((kid, index) =>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                     <ParentCard child={kid} />
                     </Grid>
                 )}

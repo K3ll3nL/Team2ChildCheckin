@@ -4,7 +4,7 @@ const URL = "http://localhost:8000";
 
 export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
-    console.log("here")
+    
     axios.get(`${URL}/parents/parent_id/kids?parent_id=${parent_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
@@ -16,8 +16,8 @@ export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
 export const getDaycare = (daycare_id) => new Promise((resolve, reject) => {
 
-    console.log("here")
-    axios.get(`${URL}/centers/center_id/name?center_id=${daycare_id}`)
+    
+    axios.get(`${URL}/centers/${daycare_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);

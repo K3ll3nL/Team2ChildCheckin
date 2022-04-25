@@ -10,29 +10,33 @@ import { useEffect } from 'react';
 
 
 export const DaycareBanner = () => {
+    const [loggedInUser,setLoggedInUser] = React.useState({});
     const navigate = useNavigate();
+    const [currDaycare,setCurrDaycare] = React.useState({});
 
-    // const [daycare, setDaycare] = React.useState("daycareName");
-    // const [daycareID, setDaycareID] = React.useState("daycareID");
-    // const [user, setUser] = React.useState("user");
+    // console.log("IN THE DAYCARE BANNER ")
     useEffect(() => {
-        let id= jwt_decoder(sessionStorage.getItem('jwt')).user_id;
-        // setUser(jwt_decoder(sessionStorage.getItem('jwt')).user_id);
-        console.log("user id", id);
-        // getDaycareID(id).then(x => setDaycareID(x));
-        // console.log(getDaycare(id));
-        console.log("daycare", getDaycare(id));
-        getDaycare(id).then(x => sessionStorage.setItem('daycare', (x.data[0].name)));
+        let _user= jwt_decoder(sessionStorage.getItem('jwt'));
+        setLoggedInUser(_user);
+        getDaycareID(_user.user_id).then(daycareId => {
+            console.log(daycareId)
+                getDaycare(daycareId.data[0].center_id).then(x => {
+                    if(x.data[0].center_id === -1) {
+                        x.data[0].name ="";
+                    }
+                    setCurrDaycare(x.data[0]);
+                    // console.log(x.data[0]);
+                })
+            })
         
-        console.log(sessionStorage.getItem('daycare'));
-        // (getDaycare(id)).then(x => setDaycare(x));
-        // console.log("daycare", daycare);
-        // console.log("daycare id", daycareID);
-        // console.log("daycareID", daycareID);
-        // console.log("daycare", daycare);
     }, []);
 
-   
+
+   const handleRemoveDaycare =() => {
+        setCurrDaycare(null);
+        console.log(loggedInUser);
+        removeDaycare(loggedInUser.user_id);
+   }
     return <>
 
 
@@ -46,7 +50,7 @@ export const DaycareBanner = () => {
             <Grid item xs={12} sx={{ mt: 2 }}>
 
                 <Typography variant="h4" gutterBottom>
-                    {sessionStorage.getItem('daycare')}
+                    {currDaycare && currDaycare.name}
                     {/* {daycareName.data&&daycareName.data[0].name} */}
                     {/* {removeDaycare()} */}
                 </Typography>
@@ -54,12 +58,7 @@ export const DaycareBanner = () => {
             </Grid>
             <Grid item xs={6}>
                 <Button 
-                    onClick={() => {
-                        removeDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id);
-                        // console.log(setDaycare);
-                        // setDaycare(getDaycare(jwt_decoder(sessionStorage.getItem('jwt')).center_id));
-
-                    }} 
+                    onClick={handleRemoveDaycare} 
                 variant="contained">
                     Remove Current Daycare
                 </Button>
