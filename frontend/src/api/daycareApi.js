@@ -1,5 +1,5 @@
 import axios from 'axios'
-const URL ="sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000";
+const URL ="http://sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000";
 
 export const getDaycares = () => new Promise((resolve, reject) => {
     

@@ -1,6 +1,6 @@
 import axios from 'axios'
 const apiEndpoint = `http://0.0.0.0:8000/parents/parent_id/kids`;
-const URL = "sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000";
+const URL = "http://sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000";
 
 export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
