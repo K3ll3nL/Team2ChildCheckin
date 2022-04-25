@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "3.145.96.3:8000"
+const URL = "http://3.145.96.3:8000"
 
 export const getEmployeesByCenterId = (centerId) => new Promise((resolve, reject) => {
 

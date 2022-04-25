@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "3.145.96.3:8000"
+const URL = "http://3.145.96.3:8000"
 
 export const postChild = (name, age, parentID=1, center_id=1) => new Promise((resolve, reject) => {
 
