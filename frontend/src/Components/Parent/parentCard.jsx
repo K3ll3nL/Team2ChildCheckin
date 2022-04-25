@@ -11,9 +11,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Grid } from '@mui/material';
 
 import { useEffect, useState } from "react";
 import {getKids} from "..//..//api/parentApi";
+import { BehaviorFace } from '../models/behaviorFace';
 
 
 export const ParentCard = ({child}) => {
@@ -46,8 +48,21 @@ export const ParentCard = ({child}) => {
             Age: {child.age}
             {/*Child.name*/}
           </Typography>
+          <Grid container spacing ={2}>
+                <Grid item xs={6}>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Recent Behavior: 
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <BehaviorFace kid={child} mutable={false}/>
+                </Grid>
+            {/*Child.healthStatus*/}
+          
+
+          </Grid>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Health Status: Healthy
+            {child.checked_in? "Checked In": "Checked Out"}
             {/*Child.healthStatus*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">

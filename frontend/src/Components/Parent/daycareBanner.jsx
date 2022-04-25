@@ -4,7 +4,13 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import { getDaycare, removeDaycare } from "..//..//api/parentApi";
+import jwt_decoder from 'jwt-decode';
+import { useNavigate } from "react-router-dom"
+
+
 export const DaycareBanner = ({daycareName,setDaycare}) => {
+    const navigate = useNavigate();
+
     return <>
 
 
@@ -18,6 +24,7 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
             <Grid item xs={12} sx={{ mt: 2 }}>
 
                 <Typography variant="h4" gutterBottom>
+                    {console.log(daycareName)}
                     {daycareName.data&&daycareName.data[0].name}
                     {/* {removeDaycare()} */}
                 </Typography>
@@ -26,16 +33,18 @@ export const DaycareBanner = ({daycareName,setDaycare}) => {
             <Grid item xs={6}>
                 <Button 
                     onClick={() => {
-                        removeDaycare();
-                        console.log(setDaycare);
-                        setDaycare();
+                        removeDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id);
+                        // console.log(setDaycare);
+                        setDaycare(getDaycare(jwt_decoder(sessionStorage.getItem('jwt')).center_id));
+
                     }} 
                 variant="contained">
                     Remove Current Daycare
                 </Button>
             </Grid>
             <Grid item xs={6} sx={{ mb: 3 }}>
-                <Button variant="contained" disableElevation>
+                <Button onClick={() => navigate("/FindDaycare")}
+                variant="contained" disableElevation>
                     Find New Daycare
                 </Button>
             </Grid>

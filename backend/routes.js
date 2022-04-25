@@ -31,7 +31,7 @@ module.exports = function routes(app, logger) {
   });
 
   // GET/centers/
-  // returns a list of all centers
+  // returns a list xof all centers
   app.get('/centers/', (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection) {
@@ -1034,6 +1034,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
+
   app.post('/notes/:child_id', (req, res) => {
     pool.getConnection(function (err, connection){
       if(err){
@@ -1048,6 +1049,9 @@ module.exports = function routes(app, logger) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
             res.status(400).send('Problem getting table'); 
+
+  
+
           } else {
             console.log(rows)
             res.status(200).json({
@@ -1055,6 +1059,36 @@ module.exports = function routes(app, logger) {
             });
           }
         });
+
+  app.put('/parents/parent_id/removeCenter', (req, res) => {
+    var parent_id = req.body.parent_id;
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`update parent set center_id = -1 where parent_id = ${parent_id}`, function (err, rows, fields) {
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table');
+        connection.query(`update child set center_id = -1 where parent_id = ${parent_id}`, function (err, rows, fields) {
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table');
+          } else {
+            console.log(rows)
+          }
+        });
+
+
+        connection.release();
+
+
       }
     });
   });
