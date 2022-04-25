@@ -8,6 +8,9 @@ import Button from '@mui/material/Button';
 import jwt_decoder from 'jwt-decode';
 import { addDaycare,getDaycare } from '../../api/parentApi';
 import { Rating } from '@mui/material';
+import { DaycareReviews } from './daycareReviews';
+import { getDaycareReviews } from '../../api/daycareApi';
+import { useState, useEffect } from 'react';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -17,7 +20,12 @@ const Img = styled('img')({
   });
 
 export const DaycareCard = ({daycare}) => {
-
+  const [reviews, setReviews] = useState([]);
+  useEffect(() => {
+    getDaycareReviews(daycare.center_id).then(x => {
+      setReviews(x.data)})
+    }, [])
+    const review_avg = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
 
 
     return<>
@@ -61,11 +69,12 @@ export const DaycareCard = ({daycare}) => {
               
                 Join This Daycare
               </Button>
+              <DaycareReviews daycareId={daycare.center_id} newReviews={setReviews}/>
             </Grid>
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              <Rating value={2} readOnly ></Rating>
+              <Rating value={review_avg} readOnly ></Rating>
             </Typography>
           </Grid>
         </Grid>

@@ -7,6 +7,7 @@ import { Grid } from "@material-ui/core";
 import ResponsiveAppBar from '../NavBar';
 import { TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { DaycareReviews } from "./daycareReviews";
 export const DaycarePage = () => {
     const [daycares, setDaycares] = useState([]);
     const [searchTerms, setSearchTerms] = useState([]);
