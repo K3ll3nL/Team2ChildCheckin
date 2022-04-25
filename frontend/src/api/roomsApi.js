@@ -1,5 +1,5 @@
 import axios from "axios";
-const URL = "http://localhost:8000"
+const URL = "sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com"
 export const getRoomsByCenterId = (centerId) => new Promise((resolve, reject) => {
 
     // console.log("here")
