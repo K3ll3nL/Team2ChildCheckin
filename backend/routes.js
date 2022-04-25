@@ -423,7 +423,7 @@ module.exports = function routes(app, logger) {
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
 
-        connection.query(`INSERT INTO room(room_name,center_id) VALUES(?,?)`, [room_name,center_id], function (err, rows, fields) {
+        connection.query(`INSERT INTO room(room_name,center_id) VALUES(?,?)`, [room_name, center_id], function (err, rows, fields) {
 
           connection.release();
           if (err) {
@@ -445,8 +445,8 @@ module.exports = function routes(app, logger) {
   //GET/employees
   //returns all employees in the database
   app.get('/employees', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
 
         // if there is an issue obtaining a connection, release the connection instance and log the error
         logger.error('Problem obtaining MySQL connection', err)
@@ -477,8 +477,8 @@ module.exports = function routes(app, logger) {
   //GET/parents
   //returns all parents in the database
   app.get('/parents', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
 
         // if there is an issue obtaining a connection, release the connection instance and log the error
         logger.error('Problem obtaining MySQL connection', err)
@@ -509,9 +509,9 @@ module.exports = function routes(app, logger) {
   //POST/createUser
   //Creates a new user in the database
   app.post('/users', (req, res) => {
-    pool.getConnection(function (err, connection){
+    pool.getConnection(function (err, connection) {
       const accessTokenSecret = 'mysupercoolsecret';
-      if(err){
+      if (err) {
 
 
         // if there is an issue obtaining a connection, release the connection instance and log the error
@@ -531,11 +531,11 @@ module.exports = function routes(app, logger) {
               if (rows.length > 0) {
                 res.status(400).send('Employee already exists');
               } else {
-                connection.query(`INSERT INTO employee(username,password,email,center_id, name) VALUES(?,?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id,req.body.name], function (err, rows, fields) {
+                connection.query(`INSERT INTO employee(username,password,email,center_id, name) VALUES(?,?,?,?,?)`, [req.body.username, req.body.password, req.body.email, req.body.center_id, req.body.name], function (err, rows, fields) {
                   if (err) {
                     // if there is an error withID the query, log the error
                     logger.error("Problem getting from table: \n", err);
-                    res.status(400).send('Problem getting table'); 
+                    res.status(400).send('Problem getting table');
                   } else {
                     console.log(rows)
                     // res.status(200).json({
@@ -543,11 +543,11 @@ module.exports = function routes(app, logger) {
                     // });
                   }
                 });
-                connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
+                connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username, req.body.password], function (err, rows, fields) {
                   if (err) {
                     // if there is an error withID the query, log the error
                     logger.error("Problem getting from table: \n", err);
-                    res.status(400).send('Problem getting table'); 
+                    res.status(400).send('Problem getting table');
                   } else {
                     console.log(rows)
                     if (rows.length > 0) {
@@ -581,11 +581,11 @@ module.exports = function routes(app, logger) {
               if (rows.length > 0) {
                 res.status(400).send('Parent already exists');
               } else {
-                connection.query(`INSERT INTO parent(username,password,email,center_id, name) VALUES(?,?,?,?,?)`, [req.body.username,req.body.password,req.body.email,req.body.center_id, req.body.name], function (err, rows, fields) {
+                connection.query(`INSERT INTO parent(username,password,email,center_id, name) VALUES(?,?,?,?,?)`, [req.body.username, req.body.password, req.body.email, req.body.center_id, req.body.name], function (err, rows, fields) {
                   if (err) {
                     // if there is an error withID the query, log the error
                     logger.error("Problem getting from table: \n", err);
-                    res.status(400).send('Problem getting table'); 
+                    res.status(400).send('Problem getting table');
                   } else {
                     console.log(rows)
                     // res.status(200).json({
@@ -593,12 +593,12 @@ module.exports = function routes(app, logger) {
                     // });
                   }
                 });
-                connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
-                  
+                connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username, req.body.password], function (err, rows, fields) {
+
                   if (err) {
                     // if there is an error withID the query, log the error
                     logger.error("Problem getting from table: \n", err);
-                    res.status(400).send('Problem getting table'); 
+                    res.status(400).send('Problem getting table');
                   } else {
                     console.log(rows)
                     if (rows.length > 0) {
@@ -621,7 +621,7 @@ module.exports = function routes(app, logger) {
 
             }
           });
-          
+
         }
       }
     });
@@ -630,73 +630,73 @@ module.exports = function routes(app, logger) {
   //POST/login
   //Logs in a user
   app.post('/login', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         const accessTokenSecret = 'mysupercoolsecret';
         // if there is no issue obtaining a connection, execute query and release connection
-        
-          connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
-            
-            if (err) {
-              // if there is an error withID the query, log the error
-              logger.error("Problem getting from table: \n", err);
-              res.status(400).send('Problem getting table'); 
+
+        connection.query(`SELECT * FROM employee WHERE username = ? AND password = ?`, [req.body.username, req.body.password], function (err, rows, fields) {
+
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table');
+          } else {
+            console.log(rows)
+            if (rows.length > 0) {
+              connection.release();
+              const token = jwt.sign({
+                user_id: rows[0].employee_id,
+                center_id: rows[0].center_id,
+                name: rows[0].name,
+                is_employee: true,
+              }, accessTokenSecret, {
+                expiresIn: '1h'
+              });
+              res.status(200).json({
+                "data": rows,
+                "token": token
+              });
             } else {
-              console.log(rows)
-              if (rows.length > 0) {
+              connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username, req.body.password], function (err, rows, fields) {
                 connection.release();
-                const token = jwt.sign({
-                  user_id: rows[0].employee_id,
-                  center_id: rows[0].center_id,
-                  name: rows[0].name,
-                  is_employee: true,
-                }, accessTokenSecret, {
-                  expiresIn: '1h'
-                });
-                res.status(200).json({
-                  "data": rows,
-                  "token": token
-                });
-              } else {
-                connection.query(`SELECT * FROM parent WHERE username = ? AND password = ?`, [req.body.username,req.body.password], function (err, rows, fields) {
-                  connection.release();
-                  if (err) {
-                    // if there is an error withID the query, log the error
-                    logger.error("Problem getting from table: \n", err);
-                    res.status(400).send('Problem getting table'); 
+                if (err) {
+                  // if there is an error withID the query, log the error
+                  logger.error("Problem getting from table: \n", err);
+                  res.status(400).send('Problem getting table');
+                } else {
+                  console.log(rows)
+                  if (rows.length > 0) {
+                    const token = jwt.sign({
+                      user_id: rows[0].parent_id,
+                      center_id: rows[0].center_id,
+                      name: rows[0].name,
+                      is_employee: false,
+                    }, accessTokenSecret, {
+                      expiresIn: '1h'
+                    });
+                    res.status(200).json({
+                      "data": rows,
+                      "token": token
+                    });
                   } else {
-                    console.log(rows)
-                    if (rows.length > 0) {
-                      const token = jwt.sign({
-                        user_id: rows[0].parent_id,
-                        center_id: rows[0].center_id,
-                        name: rows[0].name,
-                        is_employee: false,
-                      }, accessTokenSecret, {
-                        expiresIn: '1h'
-                      });
-                      res.status(200).json({
-                        "data": rows,
-                        "token": token
-                      });
-                    } else {
-                      res.status(400).send('Invalid username or password');
-                    }
+                    res.status(400).send('Invalid username or password');
                   }
-                });
-              }
+                }
+              });
             }
-          });
-          
-        
-        
-          
-          
-        
+          }
+        });
+
+
+
+
+
+
       }
     });
   });
@@ -704,11 +704,11 @@ module.exports = function routes(app, logger) {
   //GET /rooms/centerID
   //returns all rooms in a given center
   app.get('/rooms/:center_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT * FROM room WHERE center_id = ?`, [req.params.center_id], function (err, rows, fields) {
@@ -716,7 +716,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -731,11 +731,11 @@ module.exports = function routes(app, logger) {
   //GET /kids/centerID
   //returns all kids in a given center
   app.get('/kids/:center_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT * FROM child WHERE center_id = ?`, [req.params.center_id], function (err, rows, fields) {
@@ -743,7 +743,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -758,19 +758,19 @@ module.exports = function routes(app, logger) {
   //GET /kids/centerID/roomID
   //returns all kids in a given room
   app.get('/kids/:center_id/:room_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query(`SELECT * FROM child WHERE center_id = ? AND room_id = ?`, [req.params.center_id,req.params.room_id], function (err, rows, fields) {
+        connection.query(`SELECT * FROM child WHERE center_id = ? AND room_id = ?`, [req.params.center_id, req.params.room_id], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -785,11 +785,11 @@ module.exports = function routes(app, logger) {
   //GET /employees/centerID
   //returns all employees in a given center
   app.get('/employees/:center_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT * FROM employee WHERE center_id = ?`, [req.params.center_id], function (err, rows, fields) {
@@ -797,7 +797,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -812,14 +812,14 @@ module.exports = function routes(app, logger) {
   //GET /employees/centerID/roomID
   //returns all employees in a given room
   app.get('/employees/:center_id/:room_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query(`SELECT * FROM employee WHERE center_id = ? AND room_id = ?`, [req.params.center_id,req.params.room_id], function (err, rows, fields) {
+        connection.query(`SELECT * FROM employee WHERE center_id = ? AND room_id = ?`, [req.params.center_id, req.params.room_id], function (err, rows, fields) {
 
           connection.release();
           if (err) {
@@ -841,11 +841,11 @@ module.exports = function routes(app, logger) {
   //GET /centers/:centerID
   //returns all information about a given center
   app.get('/centers/:center_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT * FROM center WHERE id = ?`, [req.params.center_id], function (err, rows, fields) {
@@ -853,7 +853,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
 
           } else {
             console.log(rows)
@@ -870,11 +870,11 @@ module.exports = function routes(app, logger) {
   //GET /parents/:parentID/centerID
   //returns the center id of a given parent
   app.get('/parents/:parent_id/center_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT center_id FROM parent WHERE parent_id = ?`, [req.params.parent_id], function (err, rows, fields) {
@@ -882,7 +882,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -901,11 +901,11 @@ module.exports = function routes(app, logger) {
   //PUT /employees/:employee_id
   //updates the information room of an employee
   app.put('/employees/:employee_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query('UPDATE employee SET room_id = ? WHERE employee_id = ? ', [req.body.room_id, req.params.employee_id], function (err, rows, fields) {
@@ -913,7 +913,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -928,11 +928,11 @@ module.exports = function routes(app, logger) {
   //POST /kids
   //adds a kid to the database
   app.post('/kids', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query('INSERT INTO child (name, parent_id, room_id, age, health, center_id, behavior) VALUES (?, ?, ?, ?, ?, ?, ?)', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior], function (err, rows, fields) {
@@ -940,7 +940,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -955,11 +955,11 @@ module.exports = function routes(app, logger) {
   //GET /centerByParent_id
   //returns the center id of a given parent
   app.get('/centerByParent_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT center_id FROM parent WHERE parent_id = ?`, [req.params.parent_id], function (err, rows, fields) {
@@ -967,7 +967,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -983,11 +983,11 @@ module.exports = function routes(app, logger) {
   //updates the information of a kid
   app.put('/kids/:child_id', (req, res) => {
     console.log(req.body);
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query('UPDATE child SET name = ?, parent_id = ?, room_id = ?, age = ?, health = ?, center_id = ?, behavior = ?,checked_in = ? WHERE child_id = ?', [req.body.name, req.body.parent_id, req.body.room_id, req.body.age, req.body.health, req.body.center_id, req.body.behavior, req.body.checked_in, req.params.child_id], function (err, rows, fields) {
@@ -995,7 +995,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -1010,11 +1010,11 @@ module.exports = function routes(app, logger) {
   //GET /notes/:child_id
   //returns the notes of a given child
   app.get('/notes/:child_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query(`SELECT * FROM notes WHERE child_id = ?`, [req.params.child_id], function (err, rows, fields) {
@@ -1022,7 +1022,7 @@ module.exports = function routes(app, logger) {
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
           } else {
             console.log(rows)
             res.status(200).json({
@@ -1036,21 +1036,21 @@ module.exports = function routes(app, logger) {
 
 
   app.post('/notes/:child_id', (req, res) => {
-    pool.getConnection(function (err, connection){
-      if(err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query(`INSERT INTO notes (child_id,note) values (?,?)`, [req.params.child_id,req.body.note], function (err, rows, fields) {
+        connection.query(`INSERT INTO notes (child_id,note) values (?,?)`, [req.params.child_id, req.body.note], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table'); 
+            res.status(400).send('Problem getting table');
 
-  
+
 
           } else {
             console.log(rows)
@@ -1059,7 +1059,9 @@ module.exports = function routes(app, logger) {
             });
           }
         });
-
+      }
+    });
+  });
   app.put('/parents/parent_id/removeCenter', (req, res) => {
     var parent_id = req.body.parent_id;
     // obtain a connection from our pool of connections
@@ -1075,22 +1077,27 @@ module.exports = function routes(app, logger) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
             res.status(400).send('Problem getting table');
-        connection.query(`update child set center_id = -1 where parent_id = ${parent_id}`, function (err, rows, fields) {
-          if (err) {
-            // if there is an error withID the query, log the error
-            logger.error("Problem getting from table: \n", err);
-            res.status(400).send('Problem getting table');
           } else {
-            console.log(rows)
+            connection.query(`update child set center_id = -1 where parent_id = ${parent_id}`, function (err, rows, fields) {
+              if (err) {
+                // if there is an error withID the query, log the error
+                logger.error("Problem getting from table: \n", err);
+                res.status(400).send('Problem getting table');
+              } else {
+                console.log(rows)
+              }
+
+
+
+              connection.release();
+
+
+            });
+
           }
         });
 
-
-        connection.release();
-
-
       }
     });
-  });
-
+  })
 }
