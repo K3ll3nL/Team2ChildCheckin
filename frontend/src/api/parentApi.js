@@ -2,10 +2,10 @@ import axios from 'axios'
 const apiEndpoint = `http://0.0.0.0:8000/parents/parent_id/kids`;
 const URL = "http://localhost:8000";
 
-export const getKids = () => new Promise((resolve, reject) => {
+export const getKids = (parent_id) => new Promise((resolve, reject) => {
 
     console.log("here")
-    axios.get(`${URL}/parents/parent_id/kids?parent_id=${2}`)
+    axios.get(`${URL}/parents/parent_id/kids?parent_id=${parent_id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
