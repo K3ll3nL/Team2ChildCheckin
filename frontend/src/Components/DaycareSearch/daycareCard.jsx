@@ -31,9 +31,9 @@ export const DaycareCard = ({daycare}) => {
     >
       <Grid container spacing={2}>
         <Grid item>
-          <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="complex" src="https://picsum.photos/200" />
-          </ButtonBase>
+          
+            <Img alt="complex" src={daycare.image_url} sx={{height:175,width:200}} />
+          
         </Grid>
         <Grid item xs={12} sm container>
           <Grid item xs container direction="column" spacing={2}>
