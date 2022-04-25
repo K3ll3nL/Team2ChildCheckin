@@ -1,5 +1,5 @@
 import axios from "axios";
-const URL = "sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com"
+const URL = "sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000"
 export const getOrgs = (params) => new Promise((resolve, reject) => {
     if (params) {
 
