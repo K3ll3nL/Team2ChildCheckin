@@ -25,7 +25,6 @@ export const DaycareBanner = () => {
                         x.data[0].name ="";
                     }
                     setCurrDaycare(x.data[0]);
-                    // console.log(x.data[0]);
                 })
             })
         
