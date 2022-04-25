@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import Button from '@mui/material/Button';
+import { Rating } from '@mui/material';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -55,7 +56,7 @@ export const DaycareCard = ({daycare}) => {
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              5/5
+              <Rating value={2} readOnly ></Rating>
             </Typography>
           </Grid>
         </Grid>

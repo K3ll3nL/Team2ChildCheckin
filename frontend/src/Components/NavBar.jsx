@@ -29,7 +29,7 @@ const pages = [
         link: "/EmployeeCard"
     },
     {
-        displayName:"RoomList",
+        displayName: "RoomList",
         link: "/RoomList"
     }
 ];
@@ -38,7 +38,7 @@ const pages = [
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [user,setUser] = React.useState(null);
+    const [user, setUser] = React.useState(null);
 
     React.useEffect(() => {
         const token = sessionStorage.getItem("jwt")
@@ -47,7 +47,7 @@ const ResponsiveAppBar = () => {
         } catch (e) {
 
         }
-    },[])
+    }, [])
     const navigate = useNavigate();
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -56,11 +56,11 @@ const ResponsiveAppBar = () => {
         setAnchorElUser(event.currentTarget);
     };
     const handleLogout = () => {
-        sessionStorage.setItem("jwt","");
+        sessionStorage.setItem("jwt", "");
         navigate("/Login")
     }
     const handleDashboard = () => {
-        if(user["is_employee"]) {
+        if (user["is_employee"]) {
             navigate("/roomList")
         } else {
             navigate("/parentPage")
@@ -103,7 +103,7 @@ const ResponsiveAppBar = () => {
                     >
                         LOGO
                     </Typography> */}
-                    <img src={logo} style={{maxHeight:"4rem"}} ></img>
+                    <img src={logo} style={{ maxHeight: "4rem" }} ></img>
                     {/* <Typography
                         variant="h6"
                         noWrap
@@ -116,25 +116,26 @@ const ResponsiveAppBar = () => {
                         Child Checkin
                     </Typography>
                     {
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {
-                            !user && <Button  sx={{margin:1}} onClick={() => navigate('/Login')} theme={theme} color="secondary">Login</Button>
-                        }
-                        {
-                            !user && <Button  sx={{margin:1}} onClick={() => navigate('/Registration')} theme={theme} color="secondary">Register</Button>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            {
+                                !user && <Button sx={{ margin: 1 }} onClick={() => navigate('/Login')} theme={theme} color="secondary">Login</Button>
+                            }
+                            {
+                                !user && <Button sx={{ margin: 1 }} onClick={() => navigate('/Registration')} theme={theme} color="secondary">Register</Button>
 
-                        }
-                        {
-                            user && <Button sx={{margin:1}}  onClick={()=> navigate(user.is_employee ? '/roomList' : '/parentPage') } theme={theme} color="secondary">Dashboard</Button>
-                        }
-                    </Box>
+                            }
+                            {
+                                user && <Button sx={{ margin: 1 }} onClick={() => navigate(user.is_employee ? '/roomList' : '/parentPage')} theme={theme} color="secondary">Dashboard</Button>
+                            }
+                            <Button sx={{ margin: 1 }} onClick={() => navigate('/FindDaycare')} theme={theme} color="secondary">Our Daycares</Button>
+                        </Box>
 
                     }
-                 
-                    {<Box sx={{ flexGrow: 1, justifyContent: 'flex-end', display: {xs:'flex',md:'none'} }}>
+
+                    {<Box sx={{ flexGrow: 1, justifyContent: 'flex-end', display: { xs: 'flex', md: 'none' } }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <img alt="Remy Sharp" src={hamburgerMenu}  style={{maxHeight:"2.5rem"}} />
+                                <img alt="Remy Sharp" src={hamburgerMenu} style={{ maxHeight: "2.5rem" }} />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -154,35 +155,38 @@ const ResponsiveAppBar = () => {
                             onClose={handleCloseUserMenu}
                         >
                             {
-                               user && <MenuItem key="dashboard" onClick={handleDashboard}>
+                                user && <MenuItem key="dashboard" onClick={handleDashboard}>
                                     <Typography textAlign="center">Dashboard</Typography>
                                 </MenuItem>
 
                             }
                             {
-                                user&& <MenuItem key="Logout" onClick={handleLogout}>
+                                user && <MenuItem key="Logout" onClick={handleLogout}>
                                     <Typography textAlign="center">Logout</Typography>
                                 </MenuItem>
 
                             }
                             {
                                 !user && <MenuItem key="Login" onClick={() => navigate('/Login')}>
-                                <Typography textAlign="center">Login</Typography>
-                            </MenuItem> 
+                                    <Typography textAlign="center">Login</Typography>
+                                </MenuItem>
                             }
                             {
                                 !user && <MenuItem key="Register" onClick={() => navigate('/Registration')}>
-                                <Typography textAlign="center">Register</Typography>
-                            </MenuItem> 
+                                    <Typography textAlign="center">Register</Typography>
+                                </MenuItem>
                             }
-                            
+                                <MenuItem key="Find Daycares" onClick={() => navigate('/FindDaycare')}>
+                                    <Typography textAlign="center">Our Daycares</Typography>
+                                </MenuItem>
+
                         </Menu>
                     </Box>}
                     {
-                       user && <Button variant="outlined" theme={theme} color="secondary" sx={{display: {xs:'none',md:'flex'}}} onClick={handleLogout} >Logout</Button>
+                        user && <Button variant="outlined" theme={theme} color="secondary" sx={{ display: { xs: 'none', md: 'flex' } }} onClick={handleLogout} >Logout</Button>
 
                     }
-                    
+
                 </Toolbar>
             </Container>
         </AppBar>
