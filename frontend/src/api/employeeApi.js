@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://sampledockercompose.c5kfaihzo8iz.us-east-2.rds.amazonaws.com:8000"
+const URL = "3.145.96.3:8000"
 
 export const getEmployeesByCenterId = (centerId) => new Promise((resolve, reject) => {
 
