@@ -25,17 +25,17 @@ export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
             <div>
 
                 <Typography sx={{ display: "inline" }}>Health:   </Typography>
-                <Chip label={kid.health} />
+                <Chip label={kid.health} sx={{height:20}} />
             </div>
             <div>
 
                 <Typography sx={{ display: "inline" }}>Age:   </Typography>
-                <Chip label={kid.age} />
+                <Chip label={kid.age} sx={{height:20}}/>
             </div>
-            <Typography>Notes:</Typography>
+            <Typography display={"inline"}>Notes:</Typography>
             {
                 childNotes.map(note => (
-                    <Chip key={note} label={note['note']} sx={{ margin: 1 }} />
+                    <Chip key={note} label={note['note']} sx={{ marginLeft: 1,height:20 }} />
                 ))
             }
         </DialogContent>
