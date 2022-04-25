@@ -150,8 +150,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-<<<<<<< Updated upstream
-=======
   // GET/employee/:child_id
   // returns the employee watching child of child_id
   app.get('/employee/:child_id', (req, res) => {
@@ -181,7 +179,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
->>>>>>> Stashed changes
   // GET/parents
   // returns all parent information
   app.get('/parents/', (req, res) => {
@@ -393,7 +390,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-<<<<<<< Updated upstream
 
   // app.get('/roomsById', (req, res) => {
   //   // obtain a connection from our pool of connections
@@ -472,9 +468,6 @@ module.exports = function routes(app, logger) {
   //     }
   //   });
   // });
-=======
-  
->>>>>>> Stashed changes
 
   // POST/rooms/
   // Adds a new room to the database
