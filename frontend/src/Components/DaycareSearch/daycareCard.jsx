@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import jwt_decoder from 'jwt-decode';
 import { addDaycare,getDaycare } from '../../api/parentApi';
 import { Rating } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -18,6 +19,7 @@ const Img = styled('img')({
 
 export const DaycareCard = ({daycare}) => {
 
+  const navigate = useNavigate();
 
 
     return<>
@@ -55,7 +57,17 @@ export const DaycareCard = ({daycare}) => {
                 
               <Button
               onClick={() => {
-                addDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id,daycare.center_id);
+                try {
+                  addDaycare(jwt_decoder(sessionStorage.getItem('jwt')).user_id,daycare.center_id).then(() => {
+                    console.log("Should be navigating...");
+                    navigate("/ParentPage")
+                  });
+                  navigate("/ParentPage")
+                } catch {
+                  navigate("/Login")
+                }
+                
+                
 
             }} >
               
