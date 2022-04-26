@@ -41,8 +41,11 @@ export const ParentCard = ({ child }) => {
   };
 
   useEffect(() => {
-    getEmployeeWatchingKid(child.child_id).then(x => setEmployee(x.data[0].name));
-
+    const check = getEmployeeWatchingKid(child.child_id);
+    console.log(check);
+    if(check.length > 0){
+      getEmployeeWatchingKid(child.child_id).then(x => setEmployee(x.data[0].name));
+    }
     getNotesByKidId(child.child_id).then(x => setNotes(x));
     console.log(child.child_id, " notes are ", notes);
     getRoomNameByRoomId(child.room_id).then(x => setRoomName(x.data[0].room_name));
