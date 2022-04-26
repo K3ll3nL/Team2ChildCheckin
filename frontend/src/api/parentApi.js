@@ -100,3 +100,16 @@ export const getDaycareID = (parent_id) => new Promise((resolve, reject) => {
             reject(x);
         });
 });
+
+
+
+export const getParentByChildId = (child_id) => new Promise((resolve, reject) => {
+    
+    // console.log(config.body);
+    axios.get(`${URL}/parents/${child_id}`)
+        .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });
+});

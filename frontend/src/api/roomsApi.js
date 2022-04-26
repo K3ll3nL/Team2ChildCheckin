@@ -23,3 +23,21 @@ export const getKidsByCenterId = (centerId) => new Promise((resolve, reject) => 
         });
     
 });
+
+export const getRoomNameByRoomId = (roomId) => new Promise((resolve, reject) => {
+    axios.get(`${URL}/rooms/room_id/room_name?room_id=${roomId}`)
+    .then(x => resolve(x.data))
+    .catch(x => {
+        alert(x);
+        reject(x);
+    });
+});
+
+export const getEmployeeWatchingKid = (kidId) => new Promise((resolve, reject) => {
+    axios.get(`${URL}/employee/${kidId}`)
+    .then(x => resolve(x.data))
+    .catch(x => {
+        alert(x);
+        reject(x);
+    });
+});

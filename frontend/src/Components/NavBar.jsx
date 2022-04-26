@@ -93,7 +93,7 @@ const ResponsiveAppBar = () => {
 
     return (
         <AppBar position="static" theme={theme}>
-            <Container maxWidth="xl">
+            <Container sx={{padding:0,marginLeft:0,marginRight:0,minWidth:"100%"}}  >
                 <Toolbar disableGutters>
                     {/* <Typography
                         variant="h6"
@@ -127,7 +127,10 @@ const ResponsiveAppBar = () => {
                             {
                                 user && <Button sx={{ margin: 1 }} onClick={() => navigate(user.is_employee ? '/roomList' : '/parentPage')} theme={theme} color="secondary">Dashboard</Button>
                             }
-                            <Button sx={{ margin: 1 }} onClick={() => navigate('/FindDaycare')} theme={theme} color="secondary">Our Daycares</Button>
+                            {
+
+                                (!user || !user.is_employee )&& <Button sx={{ margin: 1 }} onClick={() => navigate('/FindDaycare')} theme={theme} color="secondary">Our Daycares</Button>
+                            }
                         </Box>
 
                     }

@@ -9,11 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box, MenuItem } from '@mui/material';
 import { postChild } from '../../api/childApi';
 import jwt_decoder from 'jwt-decode'
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import { getKids } from "..//..//api/parentApi";
 
-export default function AddChildForm({kids, setKids}) {
+export default function AddChildForm({daycare_id, setKids}) {
   const [open, setOpen] = React.useState(false);
   const [loggedInEmployee, setLoggedInEmployee] = useState({});
   const navigate = useNavigate();
@@ -43,7 +43,12 @@ export default function AddChildForm({kids, setKids}) {
     setChildName('');
   };
   const handleSubmit = () => {
-    postChild(childName, age, loggedInEmployee.user_id, loggedInEmployee.center_id).then(x=> {
+    if (age === 0 || childName === '') {
+      alert('Please fill out all fields');
+      return;
+    };
+    console.log(daycare_id)
+    postChild(childName, age, loggedInEmployee.user_id, daycare_id).then(x=> {
       getKids(loggedInEmployee.user_id).then(x => setKids(x));
     });
     setOpen(false);
