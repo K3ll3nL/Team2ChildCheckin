@@ -2,11 +2,13 @@ import { Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Grid, 
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react"
 import { addNote, getNotesByKidId } from "../../../api/employeeApi";
+import { getParentByChildId } from "../../../api/parentApi";
 
 
 
 export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
 
+    const [parent,setParent] = useState({});
     const [childNotes,setChildNotes] = useState([]);
     const [noteToAdd,setNoteToAdd] = useState("");
     useEffect(() => {
@@ -15,6 +17,11 @@ export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
             // console.log(`child_name: ${kid.name}`)
             // console.log(x.data);
             setChildNotes(x.data);
+        })
+        // console.log("ThE KID");
+        // console.log(kid);
+        kid.child_id && getParentByChildId(kid.child_id).then(x => {
+            setParent(x.data[0]);
         })
     },[kid])
 
@@ -45,6 +52,11 @@ export const ChildInformationPopUp = ({ open, setOpen, kid }) => {
 
                 <Typography sx={{ display: "inline" }}>Health:   </Typography>
                 <Chip label={kid.health} sx={{height:20}} />
+            </div>
+            <div>
+
+                <Typography sx={{ display: "inline" }}>Parent Contact:   </Typography>
+                <Chip label={parent.phone_number} sx={{height:20}} />
             </div>
             <div>
 
