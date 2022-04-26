@@ -1311,5 +1311,34 @@ module.exports = function routes(app, logger) {
 
       }
     });
-  })
+  });
+
+  //PUT /parents/
+  //updates a parent's information
+  app.put('/parents/:parent_id', (req, res) => {
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`UPDATE parent SET phone_number = ?, name = ?, email = ?, username = ?, password = ?, center_id = ? WHERE parent_id = ?`, [req.body.phone_number, req.body.name, req.body.email, req.body.username, req.body.password, req.body.center_id, req.params.parent_id], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table');
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+
 }
