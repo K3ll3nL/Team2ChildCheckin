@@ -35,7 +35,7 @@ export const DaycarePage = () => {
             </Grid>
 
             {searchTerms && searchTerms.map((_daycare, index) =>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <DaycareCard daycare={_daycare} />
                 </Grid>
             )}
