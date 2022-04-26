@@ -18,6 +18,7 @@ import { getKids } from "..//..//api/parentApi";
 import { BehaviorFace } from '../models/behaviorFace';
 import { addNote, getNotesByKidId } from '../../api/employeeApi';
 import { getEmployeeWatchingKid, getRoomNameByRoomId } from '../../api/roomsApi';
+import { fontWeight } from '@mui/system';
 
 
 export const ParentCard = ({ child }) => {
@@ -52,15 +53,15 @@ export const ParentCard = ({ child }) => {
     <Box sx={{ margin: 2 }}>
       <Card variant="outlined" sx={{ minWidth: 250, boxShadow: 2 }}>
         <CardContent >
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography variant="h6" sx={{ mb: 1.5, fontWeight:'bold'}} color="text.secondary">
             {child.name}
           </Typography>
-
+            <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+              <b>Current Room:</b> {roomName}
+            </Typography>
+            
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Current Room: {roomName}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Age: {child.age}
+            <b>Age:</b> {child.age}
             {/*Child.name*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -69,7 +70,7 @@ export const ParentCard = ({ child }) => {
           </Typography>
           <Grid container spacing={0}>
             <Grid item xs={4}>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              <Typography sx={{ mb: 1.5, fontWeight: 'bold'}} color="text.secondary">
                 Recent Behavior:
               </Typography>
             </Grid>
@@ -80,12 +81,12 @@ export const ParentCard = ({ child }) => {
 
 
           </Grid>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5, fontWeight: 'bold' }} color="text.secondary">
             {child.checked_in ? "Checked In" : "Checked Out"}
             {/*Child.healthStatus*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Notes about your child:{
+            <b>Notes about your child:</b>{
               console.log("notes", notes)}{
               notes.data && notes.data.map((note, index) =>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
