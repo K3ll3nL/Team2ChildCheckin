@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from 'react';
 
 
-export const DaycareBanner = () => {
+export const DaycareBanner = ({setDaycareID}) => {
     const [loggedInUser,setLoggedInUser] = React.useState({});
     const navigate = useNavigate();
     const [currDaycare,setCurrDaycare] = React.useState({});
@@ -19,7 +19,7 @@ export const DaycareBanner = () => {
         let _user= jwt_decoder(sessionStorage.getItem('jwt'));
         setLoggedInUser(_user);
         getDaycareID(_user.user_id).then(daycareId => {
-            console.log(daycareId)
+            setDaycareID(daycareId.data[0].center_id);
                 getDaycare(daycareId.data[0].center_id).then(x => {
                     if(x.data[0].center_id === -1) {
                         x.data[0].name ="";
