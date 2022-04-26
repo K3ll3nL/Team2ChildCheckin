@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { getKids } from "..//..//api/parentApi";
 import { BehaviorFace } from '../models/behaviorFace';
 import { addNote, getNotesByKidId } from '../../api/employeeApi';
-import { getRoomNameByRoomId } from '../../api/roomsApi';
+import { getEmployeeWatchingKid, getRoomNameByRoomId } from '../../api/roomsApi';
 
 
 export const ParentCard = ({ child }) => {
@@ -27,6 +27,7 @@ export const ParentCard = ({ child }) => {
   const [note, setNote] = React.useState("");
   const [notes, setNotes] = React.useState('');
   const [roomName, setRoomName] = React.useState('');
+  const [employee, setEmployee] = React.useState('');
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -39,6 +40,8 @@ export const ParentCard = ({ child }) => {
   };
 
   useEffect(() => {
+    getEmployeeWatchingKid(child.child_id).then(x => setEmployee(x.data[0].name));
+
     getNotesByKidId(child.child_id).then(x => setNotes(x));
     console.log(child.child_id, " notes are ", notes);
     getRoomNameByRoomId(child.room_id).then(x => setRoomName(x.data[0].room_name));
@@ -58,6 +61,10 @@ export const ParentCard = ({ child }) => {
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Age: {child.age}
+            {/*Child.name*/}
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {employee? `${employee} is watching your kid`: `Your kid is not currently in a room`}
             {/*Child.name*/}
           </Typography>
           <Grid container spacing={0}>

@@ -32,3 +32,12 @@ export const getRoomNameByRoomId = (roomId) => new Promise((resolve, reject) => 
         reject(x);
     });
 });
+
+export const getEmployeeWatchingKid = (kidId) => new Promise((resolve, reject) => {
+    axios.get(`${URL}/employee/${kidId}`)
+    .then(x => resolve(x.data))
+    .catch(x => {
+        alert(x);
+        reject(x);
+    });
+});

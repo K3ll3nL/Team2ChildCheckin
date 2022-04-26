@@ -153,7 +153,6 @@ module.exports = function routes(app, logger) {
   // GET/employee/:child_id
   // returns the employee watching child of child_id
   app.get('/employee/:child_id', (req, res) => {
-    var child_id = req.param('child_id');
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if(err){
@@ -162,7 +161,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query(`SELECT employee.employee_id, employee.name, employee.username, employee.password, employee.email, employee.center_id, employee.room_id FROM employee JOIN room r on employee.room_id = r.room_id JOIN child c on r.room_id = c.room_id WHERE c.child_id = ${child_id}`, function (err, rows, fields) {
+        connection.query(`SELECT employee.employee_id, employee.name, employee.username, employee.password, employee.email, employee.center_id, employee.room_id FROM employee JOIN room r on employee.room_id = r.room_id JOIN child c on r.room_id = c.room_id WHERE c.child_id = ?`, [req.params.child_id],function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error withID the query, log the error
