@@ -59,7 +59,7 @@ export const EmployeePage = () => {
         try {
             const _employee = jwt_decoder(sessionStorage.getItem("jwt"));
             setLoggedInEmployee(_employee);
-            // console.log(loggedInEmployee)
+            // console.log(_employee)
         } catch {
             navigate("/Login");
         }
@@ -85,17 +85,17 @@ export const EmployeePage = () => {
     let _uncheckedInKids = [];
     useEffect(() => {
 
-        // console.log(loggedInEmployee)
-        getKidsByCenterId(loggedInEmployee.center_id).then(x => {
+        console.log(loggedInEmployee)
+       loggedInEmployee.center_id && getKidsByCenterId(loggedInEmployee.center_id).then(x => {
             //    debugger;
             // console.log("Children: ")
             // x.data.map(val => {
             //     _kids.push(val)
             //     console.log(val)
             // })
-
+            // debugger;
             // console.log(x.data);
-
+            // console.log(x.data)
             for (let i in x.data) {
 
                 if (x.data[i].checked_in) {
@@ -127,7 +127,7 @@ export const EmployeePage = () => {
     const [rooms, setRooms] = useState([]);
     let _rooms = [];
     useEffect(() => {
-        getRoomsByCenterId(1).then(x => {
+        getRoomsByCenterId(loggedInEmployee.center_id).then(x => {
             //    debugger;
             x.data.forEach(val => {
                 _rooms.push(val)
@@ -135,7 +135,7 @@ export const EmployeePage = () => {
             //    console.log(_orgs);
             setRooms(_rooms);
         });
-    }, []);
+    }, [loggedInEmployee]);
 
     const handleUnassignKid = (kid) => {
         _kids = [...kids];
