@@ -1289,6 +1289,7 @@ module.exports = function routes(app, logger) {
             // if there is an error withID the query, log the error
             logger.error("Problem getting from table: \n", err);
             res.status(400).send('Problem getting table');
+          } else {
             connection.query(`update child set center_id = ${center_id} where parent_id = ${parent_id}`, function (err, rows, fields) {
               if (err) {
                 // if there is an error withID the query, log the error
@@ -1300,20 +1301,18 @@ module.exports = function routes(app, logger) {
 
 
 
-              connection.release();
-
-
+              
 
 
             });
 
           }
         });
+        connection.release();
 
       }
     });
-  });
-
+  })
 
   app.get('/rooms/room_id/room_name', (req, res) => {
     var room_id= req.param('room_id');
