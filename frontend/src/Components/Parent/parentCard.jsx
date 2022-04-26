@@ -14,17 +14,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Grid } from '@mui/material';
 
 import { useEffect, useState } from "react";
-import {getKids} from "..//..//api/parentApi";
+import { getKids } from "..//..//api/parentApi";
 import { BehaviorFace } from '../models/behaviorFace';
 import { addNote, getNotesByKidId } from '../../api/employeeApi';
 import { getRoomNameByRoomId } from '../../api/roomsApi';
 
 
-export const ParentCard = ({child}) => {
-  
+export const ParentCard = ({ child }) => {
+
 
   const [open, setOpen] = React.useState(false);
-  const [note,setNote]=React.useState("");
+  const [note, setNote] = React.useState("");
   const [notes, setNotes] = React.useState('');
   const [roomName, setRoomName] = React.useState('');
   const handleClickOpen = () => {
@@ -33,21 +33,21 @@ export const ParentCard = ({child}) => {
 
   const handleClose = () => {
     console.log(note);
-    let NoteToAdd = {"child_id":child.child_id,"note":note};
+    let NoteToAdd = { "child_id": child.child_id, "note": note };
     addNote(NoteToAdd);
     setOpen(false);
   };
 
   useEffect(() => {
     getNotesByKidId(child.child_id).then(x => setNotes(x));
-    console.log(child.child_id," notes are ", notes);
+    console.log(child.child_id, " notes are ", notes);
     getRoomNameByRoomId(child.room_id).then(x => setRoomName(x.data[0].room_name));
   }, []);
 
   return <>
 
-    <Box sx={{margin:2}}>
-      <Card variant="outlined" sx={{ minWidth: 250 , boxShadow: 2 }}>
+    <Box sx={{ margin: 2 }}>
+      <Card variant="outlined" sx={{ minWidth: 250, boxShadow: 2 }}>
         <CardContent >
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {child.name}
@@ -60,27 +60,27 @@ export const ParentCard = ({child}) => {
             Age: {child.age}
             {/*Child.name*/}
           </Typography>
-          <Grid container spacing ={2}>
-                <Grid item xs={6}>
-                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Recent Behavior: 
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <BehaviorFace kid={child} mutable={false}/>
-                </Grid>
+          <Grid container spacing={0}>
+            <Grid item xs={4}>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Recent Behavior:
+              </Typography>
+            </Grid>
+            <Grid item xs={1}>
+              <BehaviorFace kid={child} mutable={false} />
+            </Grid>
             {/*Child.healthStatus*/}
-          
+
 
           </Grid>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {child.checked_in? "Checked In": "Checked Out"}
+            {child.checked_in ? "Checked In" : "Checked Out"}
             {/*Child.healthStatus*/}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Notes about your child:{
-              console.log("notes",notes)}{
-              notes.data&&notes.data.map((note, index) =>
+              console.log("notes", notes)}{
+              notes.data && notes.data.map((note, index) =>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   <li>{note.note}</li>
                 </Typography>
