@@ -1313,6 +1313,35 @@ module.exports = function routes(app, logger) {
     });
   });
 
+
+  app.get('/rooms/room_id/room_name', (req, res) => {
+    var room_id= req.param('room_id');
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query(`select room_name from room join child c on room.room_id = c.room_id where c.room_id=${room_id}`, function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error withID the query, log the error
+            logger.error("Problem getting from table: \n", err);
+            res.status(400).send('Problem getting table'); 
+          } else {
+            console.log(rows)
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+
   //PUT /parents/
   //updates a parent's information
   app.put('/parents/:parent_id', (req, res) => {
