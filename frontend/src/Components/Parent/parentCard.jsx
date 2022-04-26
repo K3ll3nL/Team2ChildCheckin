@@ -26,7 +26,7 @@ export const ParentCard = ({ child }) => {
 
   const [open, setOpen] = React.useState(false);
   const [note, setNote] = React.useState("");
-  const [notes, setNotes] = React.useState('');
+  const [notes, setNotes] = React.useState(['']);
   const [roomName, setRoomName] = React.useState('');
   const [employee, setEmployee] = React.useState('');
   const handleClickOpen = () => {
@@ -36,6 +36,7 @@ export const ParentCard = ({ child }) => {
   const handleClose = () => {
     console.log(note);
     let NoteToAdd = { "child_id": child.child_id, "note": note };
+    
     addNote(NoteToAdd);
     setOpen(false);
   };
@@ -49,7 +50,7 @@ export const ParentCard = ({ child }) => {
     getNotesByKidId(child.child_id).then(x => setNotes(x));
     console.log(child.child_id, " notes are ", notes);
     getRoomNameByRoomId(child.room_id).then(x => setRoomName(x.data[0].room_name));
-  }, []);
+  }, [note]);
 
   return <>
 
